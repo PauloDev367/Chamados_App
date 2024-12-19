@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\V1\AuthController;
+use App\Http\Controllers\V1\SupportRequestController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -17,4 +18,16 @@ Route::group([
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::post('me', [AuthController::class, 'me']);
+});
+
+
+Route::group([
+    'middleware' => 'auth:api',
+    'prefix' => 'v1'
+], function () {
+    Route::group([
+        'prefix' => 'support-requests'
+    ], function () {
+        Route::post('', [SupportRequestController::class, 'create']);
+    });
 });

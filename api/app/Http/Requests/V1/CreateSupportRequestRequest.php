@@ -29,7 +29,6 @@ class CreateSupportRequestRequest extends FormRequest
             "title" => "required|max:255|min:10",
             "type" => ["required", new Enum(SupportRequestType::class)],
             "urgency" => ["required", new Enum(SupportRequestUrgency::class)],
-            "status" => ["required", new Enum(SupportRequestStatus::class)],
             "message" => "required|min:10",
             "print" => [
                 "nullable",
