@@ -8,4 +8,5 @@ use App\Models\User;
 interface ISupportRequestService
 {
     public function create(User $client, CreateSupportRequestRequest $request);
+    public function getAllFromClient(User $client);
 }

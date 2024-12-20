@@ -20,4 +20,9 @@ class SupportRequestController extends Controller
         $created = $this->service->create($user, $request);
         return response()->json(['success' => $created], 201);
     }
+
+    public function getAllFromClient()
+    {
+        
+    }
 }

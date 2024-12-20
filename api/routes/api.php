@@ -28,6 +28,6 @@ Route::group([
     Route::group([
         'prefix' => 'support-requests'
     ], function () {
-        Route::post('', [SupportRequestController::class, 'create']);
+        Route::post('', [SupportRequestController::class, 'create'])->name("supportrequest.create");
     });
 });
