@@ -57,9 +57,18 @@ class SupportRequestService implements ISupportRequestService
         if ($client->role != (Role::CLIENT)->value) {
             throw new UnauthorizedException("Unauthorized action");
         }
+
         $supportRequest = $this->repository->getOneFromClient($supportRequestId, $client->id);
         if ($supportRequest == null) {
             throw new ModelNotFoundException("Support request not founded");
+        }
+
+        if (
+            $supportRequest->status == (SupportRequestStatus::PENDENT)->value ||
+            (SupportRequestStatus::FINISHED_BY_CLIENT)->value ||
+            (SupportRequestStatus::FINISHED_BY_SUPPORT)->value
+        ) {
+            throw new DomainException("To finish support request, they need to be in " . (SupportRequestStatus::IN_PROGRESS)->value . " status");
         }
     }
 }

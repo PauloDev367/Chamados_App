@@ -5,6 +5,7 @@ namespace Services;
 use App\Enums\Role;
 use Tests\TestCase;
 use App\Models\User;
+use DomainException;
 use App\Models\SupportRequest;
 use App\Enums\SupportRequestStatus;
 use App\Services\SupportRequestService;
@@ -128,4 +129,31 @@ class SupportRequestServiceTest extends TestCase
         $this->expectException(ModelNotFoundException::class);
         $service->clientFinishSupporRequest($client, 1);
     }
+    
+    public function test_should_not_finish_client_support_requestservice_if_supportrequest_status_is_not_valid()
+    {
+        $supportRequest = new SupportRequest();
+        $supportRequest->title = "title";
+        $supportRequest->type = "type";
+        $supportRequest->urgency = "urgency";
+        $supportRequest->status = (SupportRequestStatus::PENDENT)->value;
+        $supportRequest->client_id = 123;
+        $supportRequest->message = "message";
+        $supportRequest->print = null;
+
+        $repository = $this->createMock(ISupportRequestRepository::class);
+        $repository->method('getOneFromClient')
+            ->willReturn($supportRequest);
+
+        $client = new User();
+        $client->id = 1;
+        $client->role = (Role::CLIENT)->value;
+
+        $service = new SupportRequestService($repository);
+
+        $this->expectException(DomainException::class);
+        $service->clientFinishSupporRequest($client, 1);
+    }
+
+    
 }
