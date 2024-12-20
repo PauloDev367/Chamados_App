@@ -11,4 +11,5 @@ interface ISupportRequestRepository
     public function getAll();
     public function update(SupportRequest $supportRequest);
     public function getOneFromClient(int $supportRequestId, int $clientId);
+    public function getOne(int $supportRequestId);
 }

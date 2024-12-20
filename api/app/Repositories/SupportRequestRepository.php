@@ -32,4 +32,9 @@ class SupportRequestRepository implements ISupportRequestRepository
             ->where("client_id", $clientId)
             ->first();
     }
+    public function getOne(int $supportRequestId)
+    {
+        return SupportRequest::where('id', $supportRequestId)
+            ->first();
+    }
 }
