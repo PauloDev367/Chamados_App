@@ -227,6 +227,6 @@ class SupportRequestServiceTest extends TestCase
         $service = new SupportRequestService($repository);
 
         $this->expectException(UnauthorizedException::class);
-        $service->supportGetAll($client);
+        $service->getAllAsSupport($client);
     }
 }
