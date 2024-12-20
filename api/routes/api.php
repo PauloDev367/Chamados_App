@@ -30,6 +30,7 @@ Route::group([
     ], function () {
         Route::post('', [SupportRequestController::class, 'create'])->name("supportrequest.create");
         Route::get('client', [SupportRequestController::class, 'getAllFromClient'])->name("supportrequest.get.client");
-        Route::patch('{id}/finish', [SupportRequestController::class, 'clientFinishSupporRequest'])->name("supportrequest.finish.client");
+        Route::patch('{id}/client/finish', [SupportRequestController::class, 'clientFinishSupporRequest'])->name("supportrequest.finish.client");
+        Route::get('{id}/client', [SupportRequestController::class, 'clientGetOneSupportRequest'])->name("supportrequest.finish.client");
     });
 });

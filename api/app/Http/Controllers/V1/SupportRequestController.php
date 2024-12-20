@@ -37,6 +37,8 @@ class SupportRequestController extends Controller
 
     public function clientGetOneSupportRequest(int $id)
     {
-        
+        $user = auth()->user();
+        $data = $this->service->clientGetOne($user, $id);
+        return response()->json(['success' => $data]);
     }
 }
