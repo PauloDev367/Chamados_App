@@ -12,9 +12,9 @@ class SupportRequestRepository implements ISupportRequestRepository
         $supportRequest->save();
         return $supportRequest;
     }
-    public function getAllFromClient(int $client_id)
+    public function getAllFromClient(int $clientId)
     {
-        return SupportRequest::where("client_id", $client_id)
+        return SupportRequest::where("client_id", $clientId)
             ->paginate(10);
     }
 
@@ -22,5 +22,11 @@ class SupportRequestRepository implements ISupportRequestRepository
     {
         $supportRequest->save();
         return $supportRequest;
+    }
+    public function getOneFromClient(int $supportRequestId, int $clientId)
+    {
+        return SupportRequest::where('id', $supportRequestId)
+            ->where("client_id", $clientId)
+            ->first();
     }
 }

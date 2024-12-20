@@ -11,6 +11,7 @@ use App\Services\SupportRequestService;
 use Illuminate\Validation\UnauthorizedException;
 use App\Http\Requests\V1\CreateSupportRequestRequest;
 use App\Repositories\Ports\ISupportRequestRepository;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class SupportRequestServiceTest extends TestCase
 {
@@ -110,6 +111,21 @@ class SupportRequestServiceTest extends TestCase
         $service = new SupportRequestService($repository);
 
         $this->expectException(UnauthorizedException::class);
+        $service->clientFinishSupporRequest($client, 1);
+    }
+    public function test_should_not_finish_client_support_requestservice_if_supportrequest_is_not_founded()
+    {
+        $repository = $this->createMock(ISupportRequestRepository::class);
+        $repository->method('getOneFromClient')
+            ->willReturn(null);
+
+        $client = new User();
+        $client->id = 1;
+        $client->role = (Role::CLIENT)->value;
+
+        $service = new SupportRequestService($repository);
+
+        $this->expectException(ModelNotFoundException::class);
         $service->clientFinishSupporRequest($client, 1);
     }
 }

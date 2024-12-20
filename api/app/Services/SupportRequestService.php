@@ -11,6 +11,7 @@ use App\Services\Ports\ISupportRequestService;
 use Illuminate\Validation\UnauthorizedException;
 use App\Http\Requests\V1\CreateSupportRequestRequest;
 use App\Repositories\Ports\ISupportRequestRepository;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class SupportRequestService implements ISupportRequestService
 {
@@ -55,6 +56,10 @@ class SupportRequestService implements ISupportRequestService
     {
         if ($client->role != (Role::CLIENT)->value) {
             throw new UnauthorizedException("Unauthorized action");
+        }
+        $supportRequest = $this->repository->getOneFromClient($supportRequestId, $client->id);
+        if ($supportRequest == null) {
+            throw new ModelNotFoundException("Support request not founded");
         }
     }
 }
