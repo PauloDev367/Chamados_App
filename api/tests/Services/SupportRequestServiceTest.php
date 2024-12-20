@@ -217,7 +217,7 @@ class SupportRequestServiceTest extends TestCase
         $this->expectException(ModelNotFoundException::class);
         $service->clientGetOne($client, 1);
     }
-    public function test_should_get_all_requestservice_if_user_role_is_not_support()
+    public function test_should_not_get_all_requestservice_if_user_role_is_not_support()
     {
         $repository = $this->createMock(ISupportRequestRepository::class);
 
@@ -228,5 +228,17 @@ class SupportRequestServiceTest extends TestCase
 
         $this->expectException(UnauthorizedException::class);
         $service->getAllAsSupport($client);
+    }
+    public function test_support_should_not_get_requestservice_if_user_role_is_not_support()
+    {
+        $repository = $this->createMock(ISupportRequestRepository::class);
+
+        $client = new User();
+        $client->role = (Role::CLIENT)->value;
+
+        $service = new SupportRequestService($repository);
+
+        $this->expectException(UnauthorizedException::class);
+        $service->supportGetAService($client, 1);
     }
 }
