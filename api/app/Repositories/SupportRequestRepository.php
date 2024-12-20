@@ -12,4 +12,9 @@ class SupportRequestRepository implements ISupportRequestRepository
         $supportRequest->save();
         return $supportRequest;
     }
+    public function getAllFromClient(int $client_id)
+    {
+        return SupportRequest::where("client_id", $client_id)
+            ->paginate(10);
+    }
 }

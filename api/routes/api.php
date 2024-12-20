@@ -29,5 +29,6 @@ Route::group([
         'prefix' => 'support-requests'
     ], function () {
         Route::post('', [SupportRequestController::class, 'create'])->name("supportrequest.create");
+        Route::get('client', [SupportRequestController::class, 'getAllFromClient'])->name("supportrequest.get.client");
     });
 });
