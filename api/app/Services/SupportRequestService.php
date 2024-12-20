@@ -89,4 +89,11 @@ class SupportRequestService implements ISupportRequestService
 
         return $supportRequest;
     }
+
+    public function supportGetAll(User $support)
+    {
+        if ($support->role != (Role::SUPPORT)->value) {
+            throw new UnauthorizedException("Unauthorized action");
+        }
+    }
 }
