@@ -71,7 +71,7 @@ class SupportRequestService implements ISupportRequestService
             throw new DomainException("To finish support request, they need to be in " . (SupportRequestStatus::IN_PROGRESS)->value . " status");
         }
 
-        $supportRequest->states = (SupportRequestStatus::FINISHED_BY_CLIENT)->value;
+        $supportRequest->status = (SupportRequestStatus::FINISHED_BY_CLIENT)->value;
         $update = $this->repository->update($supportRequest);
         return $update;
     }
