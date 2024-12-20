@@ -69,10 +69,34 @@ class SupportRequestServiceTest extends TestCase
 
         $client = new User();
         $client->role = (Role::SUPPORT)->value;
-    
+
         $service = new SupportRequestService($repository);
 
         $this->expectException(UnauthorizedException::class);
         $service->getAllFromClient($client);
+    }
+    public function test_should_get_client_support_requestservice_if_user_role_is_client()
+    {
+        $supportRequest = new SupportRequest();
+        $supportRequest->title = "title";
+        $supportRequest->type = "type";
+        $supportRequest->urgency = "urgency";
+        $supportRequest->status = (SupportRequestStatus::PENDENT)->value;
+        $supportRequest->client_id = 123;
+        $supportRequest->message = "message";
+        $supportRequest->print = null;
+
+        $repository = $this->createMock(ISupportRequestRepository::class);
+        $repository->method('getAllFromClient')
+            ->willReturn([$supportRequest]);
+
+        $client = new User();
+        $client->id = 1;
+        $client->role = (Role::CLIENT)->value;
+
+        $service = new SupportRequestService($repository);
+
+        $data = $service->getAllFromClient($client);
+        $this->assertEquals(1, count($data));
     }
 }
