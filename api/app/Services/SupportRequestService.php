@@ -90,10 +90,13 @@ class SupportRequestService implements ISupportRequestService
         return $supportRequest;
     }
 
-    public function supportGetAll(User $support)
+    public function getAllAsSupport(User $support)
     {
         if ($support->role != (Role::SUPPORT)->value) {
             throw new UnauthorizedException("Unauthorized action");
         }
+
+        $data = $this->repository->getAll();
+        return $data;
     }
 }

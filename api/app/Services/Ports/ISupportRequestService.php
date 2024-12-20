@@ -11,4 +11,5 @@ interface ISupportRequestService
     public function getAllFromClient(User $client);
     public function clientFinishSupporRequest(User $client, int $supportRequestId);
     public function clientGetOne(User $client, int $id);
+    public function getAllAsSupport(User $support);
 }
