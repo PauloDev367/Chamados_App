@@ -9,4 +9,5 @@ interface ISupportRequestService
 {
     public function create(User $client, CreateSupportRequestRequest $request);
     public function getAllFromClient(User $client);
+    public function clientFinishSupporRequest(User $client, int $supportRequestId);
 }

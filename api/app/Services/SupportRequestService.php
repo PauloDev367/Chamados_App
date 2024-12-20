@@ -50,4 +50,11 @@ class SupportRequestService implements ISupportRequestService
 
         return $this->repository->getAllFromClient($client->id);
     }
+
+    public function clientFinishSupporRequest(User $client, int $supportRequestId)
+    {
+        if ($client->role != (Role::CLIENT)->value) {
+            throw new UnauthorizedException("Unauthorized action");
+        }
+    }
 }

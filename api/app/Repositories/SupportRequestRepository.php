@@ -17,4 +17,10 @@ class SupportRequestRepository implements ISupportRequestRepository
         return SupportRequest::where("client_id", $client_id)
             ->paginate(10);
     }
+
+    public function update(SupportRequest $supportRequest)
+    {
+        $supportRequest->save();
+        return $supportRequest;
+    }
 }

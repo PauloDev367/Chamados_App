@@ -99,4 +99,17 @@ class SupportRequestServiceTest extends TestCase
         $data = $service->getAllFromClient($client);
         $this->assertEquals(1, count($data));
     }
+
+    public function test_should_not_finish_client_support_requestservice_if_user_role_is_no_client()
+    {
+        $repository = $this->createMock(ISupportRequestRepository::class);
+
+        $client = new User();
+        $client->role = (Role::SUPPORT)->value;
+
+        $service = new SupportRequestService($repository);
+
+        $this->expectException(UnauthorizedException::class);
+        $service->clientFinishSupporRequest($client, 1);
+    }
 }
