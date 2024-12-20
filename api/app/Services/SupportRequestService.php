@@ -75,4 +75,18 @@ class SupportRequestService implements ISupportRequestService
         $update = $this->repository->update($supportRequest);
         return $update;
     }
+
+    public function clientGetOne(User $client, int $id)
+    {
+        if ($client->role != (Role::CLIENT)->value) {
+            throw new UnauthorizedException("Unauthorized action");
+        }
+
+        $supportRequest = $this->repository->getOneFromClient($id, $client->id);
+        if ($supportRequest == null) {
+            throw new ModelNotFoundException("Support request not founded");
+        }
+
+        return $supportRequest;
+    }
 }

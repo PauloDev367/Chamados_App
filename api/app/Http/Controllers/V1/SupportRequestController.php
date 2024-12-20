@@ -34,4 +34,9 @@ class SupportRequestController extends Controller
         $data = $this->service->clientFinishSupporRequest($user, $id);
         return response()->json(['success' => $data]);
     }
+
+    public function clientGetOneSupportRequest(int $id)
+    {
+        
+    }
 }

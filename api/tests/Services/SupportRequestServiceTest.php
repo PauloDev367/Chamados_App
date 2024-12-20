@@ -190,4 +190,32 @@ class SupportRequestServiceTest extends TestCase
         $update = $service->clientFinishSupporRequest($client, 1);
         $this->assertEquals($update->status, (SupportRequestStatus::FINISHED_BY_CLIENT)->value);
     }
+    public function test_should_get_client_requestservice_if_user_role_is_no_client()
+    {
+        $repository = $this->createMock(ISupportRequestRepository::class);
+
+        $client = new User();
+        $client->role = (Role::SUPPORT)->value;
+
+        $service = new SupportRequestService($repository);
+
+        $this->expectException(UnauthorizedException::class);
+        $service->clientGetOne($client, 1);
+    }
+    public function test_should_not_get_client_requestservice_if_supportrequest_is_not_founded()
+    {
+        $repository = $this->createMock(ISupportRequestRepository::class);
+        $repository->method('getOneFromClient')
+            ->willReturn(null);
+
+        $client = new User();
+        $client->id = 1;
+        $client->role = (Role::CLIENT)->value;
+
+        $service = new SupportRequestService($repository);
+
+        $this->expectException(ModelNotFoundException::class);
+        $service->clientGetOne($client, 1);
+    }
+
 }
