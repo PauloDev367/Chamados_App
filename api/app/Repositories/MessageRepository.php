@@ -12,4 +12,8 @@ class MessageRepository implements IMessageRepository
         $message->save();
         return $message;
     }
+    public function getAll(int $supportRequestId)
+    {
+        return Message::where('support_requests_id', $supportRequestId)->get();
+    }
 }

@@ -41,5 +41,6 @@ Route::group([
         'prefix' => 'messages'
     ], function () {
         Route::post('', [MessagesController::class, 'supportAdd'])->name("message.add");
+        Route::get('support-request/{id}', [MessagesController::class, 'getAll'])->name("message.getall");
     });
 });

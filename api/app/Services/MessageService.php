@@ -64,5 +64,8 @@ class MessageService implements IMessageService
         if ($user->id != $supportRequest->support_id && $user->id != $supportRequest->client_id) {
             throw new UnauthorizedException("You don't have permission to read this messages");
         }
+
+        $data = $this->repository->getAll($supportRequest->id);
+        return $data;
     }
 }

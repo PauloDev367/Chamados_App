@@ -7,4 +7,5 @@ use App\Models\Message;
 interface IMessageRepository
 {
     public function create(Message $message);
+    public function getAll(int $supportRequestId);
 }

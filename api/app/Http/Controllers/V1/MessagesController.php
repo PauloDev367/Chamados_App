@@ -19,4 +19,10 @@ class MessagesController extends Controller
         $data = $this->service->supportAddMessage($user, $request);
         return response()->json(['success' => $data], 201);
     }
+    public function getAll(int $id)
+    {
+        $user = auth()->user();
+        $data = $this->service->getAll($user, $id);
+        return response()->json(['success' => $data], 200);
+    }
 }
