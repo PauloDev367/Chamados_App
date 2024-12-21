@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\V1\AuthController;
+use App\Http\Controllers\V1\MessagesController;
 use App\Http\Controllers\V1\SupportRequestController;
 
 Route::get('/user', function (Request $request) {
@@ -35,5 +36,10 @@ Route::group([
         Route::get('', [SupportRequestController::class, 'supportGetAll'])->name("supportrequest.getall.support");
         Route::patch('{id}/manage', [SupportRequestController::class, 'supportGetOneToManage'])->name("supportrequest.manage.support");
         Route::patch('{id}/finish', [SupportRequestController::class, 'supportFinishService'])->name("supportrequest.finish.support");
+    });
+    Route::group([
+        'prefix' => 'messages'
+    ], function () {
+        Route::post('', [MessagesController::class, 'supportAdd'])->name("message.add");
     });
 });

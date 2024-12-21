@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\MessageStatus;
 use App\Enums\MessageType;
 use App\Enums\Role;
+use App\Enums\SupportRequestStatus;
 use App\Models\User;
 use App\Services\Ports\IMessageService;
 use App\Repositories\Ports\IMessageRepository;
@@ -22,15 +23,19 @@ class MessageService implements IMessageService
         private readonly ISupportRequestRepository $iSupportRequestRepository,
     ) {}
 
-    public function supportAddMessage(User $support, AddMessageToSupportRequestRequest $request, int $supportRequestId)
+    public function supportAddMessage(User $support, AddMessageToSupportRequestRequest $request)
     {
         if ($support->role != (Role::SUPPORT)->value) {
             throw new UnauthorizedException('Unauthorized action');
         }
 
-        $supportRequest = $this->iSupportRequestRepository->getOne($supportRequestId);
+        $supportRequest = $this->iSupportRequestRepository->getOne($request->support_request_id);
         if ($supportRequest == null) {
             throw new ModelNotFoundException("Support request not founded");
+        }
+
+        if ($supportRequest != (SupportRequestStatus::IN_PROGRESS)->value) {
+            throw new DomainException('This support request was finished or not initiated');
         }
 
         if ($supportRequest->support_id != $support->id) {

@@ -13,5 +13,10 @@ class MessagesController extends Controller
         private readonly IMessageService $service
     ) {}
 
-    public function supportAdd(AddMessageToSupportRequestRequest $request) {}
+    public function supportAdd(AddMessageToSupportRequestRequest $request)
+    {
+        $user = auth()->user();
+        $data = $this->service->supportAddMessage($user, $request);
+        return response()->json(['success' => $data], 201);
+    }
 }
