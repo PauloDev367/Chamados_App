@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class SupportRequestServiceTest extends TestCase
 {
-    public function test_should_not_create_support_requestservice_if_role_is_not_client()
+    public function test_should_not_create_support_requestservice_if_user_role_is_not_client()
     {
         $repository = $this->createMock(ISupportRequestRepository::class);
 
@@ -32,7 +32,7 @@ class SupportRequestServiceTest extends TestCase
         $this->expectException(UnauthorizedException::class);
         $service->create($client, $request);
     }
-    public function test_should_create_requestservice_if_role_is_client()
+    public function test_should_create_requestservice_if_user_role_is_client()
     {
         $supportRequest = new SupportRequest();
         $supportRequest->title = "title";
@@ -65,7 +65,7 @@ class SupportRequestServiceTest extends TestCase
         $created = $service->create($client, $request);
         $this->assertEquals($created, $supportRequest);
     }
-    public function test_should_not_get_client_requestservice_if_role_is_not_client()
+    public function test_should_not_get_client_requestservice_if_user_role_is_not_client()
     {
         $repository = $this->createMock(ISupportRequestRepository::class);
 
@@ -251,6 +251,29 @@ class SupportRequestServiceTest extends TestCase
         $service = new SupportRequestService($repository);
 
         $this->expectException(ModelNotFoundException::class);
+        $service->supportGetAService($client, 1);
+    }
+    public function test_support_should_not_get_requestservice_if_supportrequest_status_is_invalid()
+    {
+        $supportRequest = new SupportRequest();
+        $supportRequest->title = "title";
+        $supportRequest->type = "type";
+        $supportRequest->urgency = "urgency";
+        $supportRequest->status = (SupportRequestStatus::IN_PROGRESS)->value;
+        $supportRequest->client_id = 123;
+        $supportRequest->message = "message";
+        $supportRequest->print = null;
+
+        $repository = $this->createMock(ISupportRequestRepository::class);
+        $repository->method('getOne')
+            ->willReturn($supportRequest);
+
+        $client = new User();
+        $client->role = (Role::SUPPORT)->value;
+
+        $service = new SupportRequestService($repository);
+
+        $this->expectException(DomainException::class);
         $service->supportGetAService($client, 1);
     }
 }
