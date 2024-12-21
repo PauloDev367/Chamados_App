@@ -16,4 +16,9 @@ class MessageRepository implements IMessageRepository
     {
         return Message::where('support_requests_id', $supportRequestId)->get();
     }
+    public function getLastMessageFromSupportRequest(int $supportRequestId){
+        return Message::where('support_requests_id', $supportRequestId)
+            ->latest('id')
+            ->first();
+    }
 }

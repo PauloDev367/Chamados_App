@@ -87,6 +87,15 @@ class MessageService implements IMessageService
             throw new DomainException("You don't have permission to add a message to this service request");
         }
 
+        $lastMessage = $this->repository->getLastMessageFromSupportRequest($supportRequest->id);
+
+        if ($lastMessage == null) {
+            throw new DomainException("You need to wait the support response to send your message");
+        }
+        if ($lastMessage->type != (MessageType::SUPPORT)->value) {
+            throw new DomainException("You need to wait the support response to send your message");
+        }
+
         $message = new Message();
         $message->message = $request->message;
         $message->client_id = $supportRequest->client_id;

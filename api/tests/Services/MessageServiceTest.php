@@ -2,6 +2,7 @@
 
 namespace Services;
 
+use App\Enums\MessageType;
 use App\Enums\Role;
 use App\Enums\SupportRequestStatus;
 use Tests\TestCase;
@@ -13,6 +14,7 @@ use App\Repositories\Ports\IMessageRepository;
 use Illuminate\Validation\UnauthorizedException;
 use App\Repositories\Ports\ISupportRequestRepository;
 use App\Http\Requests\AddMessageToSupportRequestRequest;
+use App\Models\Message;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class MessageServiceTest extends TestCase
@@ -170,7 +172,7 @@ class MessageServiceTest extends TestCase
         $this->expectException(ModelNotFoundException::class);
         $service->clientAddMessage($client, $request);
     }
-    public function test_client_should_not_add_a_message_to_service_request_if_client_id_from_supportrequest_is_different_than_support_id()
+    public function test_client_should_not_add_a_message_to_service_request_if_client_id_from_supportrequest_is_different_than_client_id()
     {
         $supportRequest = new SupportRequest();
         $supportRequest->client_id = 1;
@@ -182,6 +184,60 @@ class MessageServiceTest extends TestCase
 
         $client = new User();
         $client->id = 2;
+        $client->role = (Role::CLIENT)->value;
+
+        $request = new AddMessageToSupportRequestRequest();
+        $request->merge([
+            'support_request_id' => 1,
+        ]);
+        $service = new MessageService($iMessageRepository, $iSupportRequestRepository);
+
+        $this->expectException(DomainException::class);
+        $service->clientAddMessage($client, $request);
+    }
+    public function test_client_should_not_add_a_message_to_service_request_if_last_message_was_null()
+    {
+        $supportRequest = new SupportRequest();
+        $supportRequest->client_id = 1;
+
+        $iMessageRepository = $this->createMock(IMessageRepository::class);
+        $iMessageRepository->method('getLastMessageFromSupportRequest')
+            ->willReturn(null);
+
+        $iSupportRequestRepository = $this->createMock(ISupportRequestRepository::class);
+        $iSupportRequestRepository->method('getOne')
+            ->willReturn($supportRequest);
+
+        $client = new User();
+        $client->id = 1;
+        $client->role = (Role::CLIENT)->value;
+
+        $request = new AddMessageToSupportRequestRequest();
+        $request->merge([
+            'support_request_id' => 1,
+        ]);
+        $service = new MessageService($iMessageRepository, $iSupportRequestRepository);
+
+        $this->expectException(DomainException::class);
+        $service->clientAddMessage($client, $request);
+    }
+    public function test_client_should_not_add_a_message_to_service_request_if_last_message_was_not_from_support()
+    {
+        $supportRequest = new SupportRequest();
+        $supportRequest->client_id = 1;
+
+        $message = new Message();
+        $message->type = (MessageType::CLIENT)->value;
+        $iMessageRepository = $this->createMock(IMessageRepository::class);
+        $iMessageRepository->method('getLastMessageFromSupportRequest')
+            ->willReturn(null);
+
+        $iSupportRequestRepository = $this->createMock(ISupportRequestRepository::class);
+        $iSupportRequestRepository->method('getOne')
+            ->willReturn($supportRequest);
+
+        $client = new User();
+        $client->id = 1;
         $client->role = (Role::CLIENT)->value;
 
         $request = new AddMessageToSupportRequestRequest();
