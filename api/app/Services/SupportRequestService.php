@@ -120,4 +120,28 @@ class SupportRequestService implements ISupportRequestService
         $supportRequest->save();
         return $supportRequest;
     }
+
+    public function supportFinishService(User $support, int $id)
+    {
+
+        if ($support->role != (Role::SUPPORT)->value) {
+            throw new UnauthorizedException("Unauthorized action");
+        }
+
+        $supportRequest = $this->repository->getOneFromClient($id, $support->id);
+        if ($supportRequest == null) {
+            throw new ModelNotFoundException("Support request not founded");
+        }
+
+        if (
+            $supportRequest->status == (SupportRequestStatus::PENDENT)->value ||
+            $supportRequest->status == (SupportRequestStatus::FINISHED_BY_CLIENT)->value ||
+            $supportRequest->status == (SupportRequestStatus::FINISHED_BY_SUPPORT)->value
+        ) {
+            throw new DomainException("To finish support request, they need to be in " . (SupportRequestStatus::IN_PROGRESS)->value . " status");
+        }
+        $supportRequest->status = (SupportRequestStatus::FINISHED_BY_SUPPORT)->value;
+        $update = $this->repository->update($supportRequest);
+        return $update;
+    }
 }
