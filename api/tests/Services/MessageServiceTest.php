@@ -101,4 +101,17 @@ class MessageServiceTest extends TestCase
         $this->expectException(DomainException::class);
         $service->supportAddMessage($support, $request);
     }
+    public function test_should_not_get_all_messages_from_supportrequest_if_supportrequest_is_not_found()
+    {
+        $iMessageRepository = $this->createMock(IMessageRepository::class);
+        $iSupportRequestRepository = $this->createMock(ISupportRequestRepository::class);
+        $iSupportRequestRepository->method('getOne')
+            ->willReturn(null);
+
+        $user = new User();
+        $service = new MessageService($iMessageRepository, $iSupportRequestRepository);
+
+        $this->expectException(ModelNotFoundException::class);
+        $service->getAll($user, 1);
+    }
 }

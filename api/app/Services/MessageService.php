@@ -54,4 +54,11 @@ class MessageService implements IMessageService
         $created = $this->repository->create($message);
         return $created;
     }
+    public function getAll(User $support, int $supportRequestId)
+    {
+        $supportRequest = $this->iSupportRequestRepository->getOne($supportRequestId);
+        if ($supportRequest == null) {
+            throw new ModelNotFoundException("Support request not founded");
+        }
+    }
 }

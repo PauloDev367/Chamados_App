@@ -8,4 +8,5 @@ use App\Http\Requests\AddMessageToSupportRequestRequest;
 interface IMessageService
 {
     public function supportAddMessage(User $support, AddMessageToSupportRequestRequest $request);
+    public function getAll(User $support, int $supportRequestId);
 }
