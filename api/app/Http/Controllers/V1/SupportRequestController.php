@@ -48,4 +48,11 @@ class SupportRequestController extends Controller
         $data = $this->service->getAllAsSupport($user);
         return response()->json(['success' => $data], 200);
     }
+    
+    public function supportGetOneToManage(int $id)
+    {
+        $user = auth()->user();
+        $data = $this->service->supportGetAService($user,$id);
+        return response()->json(['success' => $data], 200);
+    }
 }

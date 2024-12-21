@@ -32,6 +32,7 @@ Route::group([
         Route::get('client', [SupportRequestController::class, 'getAllFromClient'])->name("supportrequest.get.client");
         Route::patch('{id}/client/finish', [SupportRequestController::class, 'clientFinishSupporRequest'])->name("supportrequest.finish.client");
         Route::get('{id}/client', [SupportRequestController::class, 'clientGetOneSupportRequest'])->name("supportrequest.finish.client");
-        Route::get('', [SupportRequestController::class, 'supportGetAll'])->name("supportrequest.finish.client");
+        Route::get('', [SupportRequestController::class, 'supportGetAll'])->name("supportrequest.getall.support");
+        Route::patch('{id}/manage', [SupportRequestController::class, 'supportGetOneToManage'])->name("supportrequest.finish.support");
     });
 });
