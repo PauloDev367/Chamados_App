@@ -34,7 +34,7 @@ class MessageService implements IMessageService
             throw new ModelNotFoundException("Support request not founded");
         }
 
-        if ($supportRequest != (SupportRequestStatus::IN_PROGRESS)->value) {
+        if ($supportRequest->status != (SupportRequestStatus::IN_PROGRESS)->value) {
             throw new DomainException('This support request was finished or not initiated');
         }
 

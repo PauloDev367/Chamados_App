@@ -18,13 +18,13 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (Throwable $e) {
             if ($e instanceof DomainException) {
-                return response()->json(['error' => $e->getMessage()]);
+                return response()->json(['error' => $e->getMessage()], 400);
             }
             if ($e instanceof UnauthorizedException) {
-                return response()->json(['error' => $e->getMessage()]);
+                return response()->json(['error' => $e->getMessage()], 403);
             }
             if ($e instanceof ModelNotFoundException) {
-                return response()->json(['error' => $e->getMessage()]);
+                return response()->json(['error' => $e->getMessage()], 404);
             }
         });
     })->create();
