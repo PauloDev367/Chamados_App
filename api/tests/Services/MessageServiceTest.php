@@ -131,4 +131,66 @@ class MessageServiceTest extends TestCase
         $this->expectException(UnauthorizedException::class);
         $service->getAll($user, 1);
     }
+
+
+
+    public function test_message_should_not_be_add_to_service_request_if_user_id_is_not_client()
+    {
+        $iMessageRepository = $this->createMock(IMessageRepository::class);
+        $iSupportRequestRepository = $this->createMock(ISupportRequestRepository::class);
+
+        $client = new User();
+        $client->role = (Role::SUPPORT)->value;
+
+        $request = new AddMessageToSupportRequestRequest();
+        $request->merge([
+            'user_role' => 'non_client',
+        ]);
+        $service = new MessageService($iMessageRepository, $iSupportRequestRepository);
+
+        $this->expectException(UnauthorizedException::class);
+        $service->clientAddMessage($client, $request);
+    }
+    public function test_client_should_not_add_a_message_to_service_request_if_supportrequest_is_not_found()
+    {
+        $iMessageRepository = $this->createMock(IMessageRepository::class);
+        $iSupportRequestRepository = $this->createMock(ISupportRequestRepository::class);
+        $iSupportRequestRepository->method('getOne')
+            ->willReturn(null);
+
+        $client = new User();
+        $client->role = (Role::CLIENT)->value;
+
+        $request = new AddMessageToSupportRequestRequest();
+        $request->merge([
+            'support_request_id' => 1,
+        ]);
+        $service = new MessageService($iMessageRepository, $iSupportRequestRepository);
+
+        $this->expectException(ModelNotFoundException::class);
+        $service->clientAddMessage($client, $request);
+    }
+    public function test_client_should_not_add_a_message_to_service_request_if_client_id_from_supportrequest_is_different_than_support_id()
+    {
+        $supportRequest = new SupportRequest();
+        $supportRequest->client_id = 1;
+
+        $iMessageRepository = $this->createMock(IMessageRepository::class);
+        $iSupportRequestRepository = $this->createMock(ISupportRequestRepository::class);
+        $iSupportRequestRepository->method('getOne')
+            ->willReturn($supportRequest);
+
+        $client = new User();
+        $client->id = 2;
+        $client->role = (Role::CLIENT)->value;
+
+        $request = new AddMessageToSupportRequestRequest();
+        $request->merge([
+            'support_request_id' => 1,
+        ]);
+        $service = new MessageService($iMessageRepository, $iSupportRequestRepository);
+
+        $this->expectException(DomainException::class);
+        $service->clientAddMessage($client, $request);
+    }
 }

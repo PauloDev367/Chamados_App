@@ -68,4 +68,35 @@ class MessageService implements IMessageService
         $data = $this->repository->getAll($supportRequest->id);
         return $data;
     }
+    public function clientAddMessage(User $client, AddMessageToSupportRequestRequest $request)
+    {
+        if ($client->role != (Role::CLIENT)->value) {
+            throw new UnauthorizedException('Unauthorized action');
+        }
+
+        $supportRequest = $this->iSupportRequestRepository->getOne($request->support_request_id);
+        if ($supportRequest == null) {
+            throw new ModelNotFoundException("Support request not founded");
+        }
+
+        if ($supportRequest->status != (SupportRequestStatus::IN_PROGRESS)->value) {
+            throw new DomainException('This support request was finished or not initiated');
+        }
+
+        if ($supportRequest->client_id != $client->id) {
+            throw new DomainException("You don't have permission to add a message to this service request");
+        }
+
+        $message = new Message();
+        $message->message = $request->message;
+        $message->client_id = $supportRequest->client_id;
+        $message->support_id = $client->id;
+        $message->support_requests_id = $supportRequest->id;
+        $message->status = (MessageStatus::WAITING_CLIENT_RESPONSE)->value;
+        $message->type = (MessageType::CLIENT)->value;
+
+
+        $created = $this->repository->create($message);
+        return $created;
+    }
 }
