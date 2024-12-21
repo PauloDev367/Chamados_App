@@ -54,11 +54,15 @@ class MessageService implements IMessageService
         $created = $this->repository->create($message);
         return $created;
     }
-    public function getAll(User $support, int $supportRequestId)
+    public function getAll(User $user, int $supportRequestId)
     {
         $supportRequest = $this->iSupportRequestRepository->getOne($supportRequestId);
         if ($supportRequest == null) {
             throw new ModelNotFoundException("Support request not founded");
+        }
+
+        if ($user->id != $supportRequest->support_id && $user->id != $supportRequest->client_id) {
+            throw new UnauthorizedException("You don't have permission to read this messages");
         }
     }
 }
