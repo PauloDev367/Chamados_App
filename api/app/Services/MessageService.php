@@ -92,6 +92,7 @@ class MessageService implements IMessageService
         if ($lastMessage == null) {
             throw new DomainException("You need to wait the support response to send your message");
         }
+
         if ($lastMessage->type != (MessageType::SUPPORT)->value) {
             throw new DomainException("You need to wait the support response to send your message");
         }
@@ -101,9 +102,8 @@ class MessageService implements IMessageService
         $message->client_id = $supportRequest->client_id;
         $message->support_id = $client->id;
         $message->support_requests_id = $supportRequest->id;
-        $message->status = (MessageStatus::WAITING_CLIENT_RESPONSE)->value;
+        $message->status = (MessageStatus::WAITING_SUPPORT_RESPONSE)->value;
         $message->type = (MessageType::CLIENT)->value;
-
 
         $created = $this->repository->create($message);
         return $created;

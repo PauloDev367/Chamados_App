@@ -42,5 +42,6 @@ Route::group([
     ], function () {
         Route::post('', [MessagesController::class, 'supportAdd'])->name("message.add");
         Route::get('support-request/{id}', [MessagesController::class, 'getAll'])->name("message.getall");
+        Route::post('client', [MessagesController::class, 'clientAdd'])->name("message.client.add");
     });
 });
