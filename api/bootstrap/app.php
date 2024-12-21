@@ -1,6 +1,6 @@
 <?php
 
-use DomainException;
+
 use Illuminate\Foundation\Application;
 use Illuminate\Validation\UnauthorizedException;
 use Illuminate\Foundation\Configuration\Exceptions;
