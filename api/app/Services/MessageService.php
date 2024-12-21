@@ -9,6 +9,7 @@ use App\Repositories\Ports\IMessageRepository;
 use Illuminate\Validation\UnauthorizedException;
 use App\Repositories\Ports\ISupportRequestRepository;
 use App\Http\Requests\AddMessageToSupportRequestRequest;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class MessageService implements IMessageService
 {
@@ -23,7 +24,11 @@ class MessageService implements IMessageService
             throw new UnauthorizedException('Unauthorized action');
         }
 
-        
+        $supportRequest = $this->iSupportRequestRepository->getOne($supportRequestId);
+        if ($supportRequest == null) {
+            throw new ModelNotFoundException("Support request not founded");
+        }
 
+        
     }
 }
