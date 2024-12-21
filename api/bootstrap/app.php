@@ -2,8 +2,10 @@
 
 use DomainException;
 use Illuminate\Foundation\Application;
+use Illuminate\Validation\UnauthorizedException;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
