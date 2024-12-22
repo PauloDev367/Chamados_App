@@ -6,7 +6,11 @@
           <div class="col-12">
             <div class="head-view">
               <h2>Meus chamados</h2>
-              <button class="chamado">
+              <button
+                class="chamado"
+                data-toggle="modal"
+                data-target="#modalAddNewSupportRequest"
+              >
                 <i class="fa-regular fa-square-plus"></i> Abrir chamado
               </button>
             </div>
@@ -42,6 +46,72 @@
       </div>
     </main>
   </div>
+
+  <div
+    class="modal fade"
+    id="modalAddNewSupportRequest"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="modalAddNewSupportRequestTitle"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalAddNewSupportRequestTitle">
+            Abrir chamado
+          </h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="">
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Titulo:</label>
+              <input type="text" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label>Tipo:</label>
+              <select class="form-control">
+                <option selected disabled>Selecione</option>
+                <option value="TECHNICAL">Técnico</option>
+                <option value="FINANCIAL">Financeiro</option>
+                <option value="OTHER">Outros</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Urgência:</label>
+              <select class="form-control">
+                <option selected disabled>Selecione</option>
+                <option value="LOW">Baixa</option>
+                <option value="MEDIUM">Média</option>
+                <option value="URGENCY">Alta</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Mensagem:</label>
+              <textarea type="text" rows="5" class="form-control"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Foto 5MB:</label>
+              <input type="file" class="form-control" />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit">
+              <i class="fa-regular fa-square-plus"></i> Abrir chamado
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -69,6 +139,7 @@ main .container {
   padding: 20px;
 }
 
+#modalAddNewSupportRequest form button,
 button.chamado {
   background-color: #720455;
   color: #fff;
