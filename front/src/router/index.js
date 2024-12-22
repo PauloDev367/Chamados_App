@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ClientHomeView from '../views/client/ClientHomeView.vue'
+import ClientSupportRequestView from '../views/client/ClientSupportRequestView.vue'
 import SupportHomeView from '../views/support/SupportHomeView.vue'
 import SupportRequestView from '../views/support/SupportRequestView.vue'
 
@@ -14,6 +15,11 @@ const routes = [
     path: '/client',
     name: 'client',
     component: ClientHomeView
+  },
+  {
+    path: '/client/support-request/:id',
+    name: 'client-supportrequest-page',
+    component: ClientSupportRequestView
   },
   {
     path: '/support',
