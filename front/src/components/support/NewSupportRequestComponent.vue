@@ -1,79 +1,89 @@
 <template>
   <ul class="list-group">
     <li class="list-group-item">
-      <div class="title-area">
-        <h3 class="title">Cras justo odio</h3>
-        <div>
-          <h4>01/01/2024 00:00:00</h4>
-          <span class="badge badge-secondary"> usuario@email.com </span>
+      <a href="/support/support-request/1" class="area-base">
+        <div class="title-area">
+          <h3 class="title">Cras justo odio</h3>
+          <div>
+            <h4>01/01/2024 00:00:00</h4>
+            <span class="badge badge-secondary"> usuario@email.com </span>
+          </div>
         </div>
-      </div>
 
-      <div class="badges-area">
-        <span class="badge badge-danger">Urgência</span>
-        <span class="badge badge-info">Tipo</span>
-        <span class="badge badge-warning">Status</span>
-      </div>
+        <div class="badges-area">
+          <span class="badge badge-danger">Urgência</span>
+          <span class="badge badge-info">Tipo</span>
+          <span class="badge badge-warning">Status</span>
+        </div>
+      </a>
     </li>
     <li class="list-group-item">
-      <div class="title-area">
-        <h3 class="title">Dapibus ac facilisis in</h3>
-        <div>
-          <h4>01/01/2024 00:00:00</h4>
-          <span class="badge badge-secondary"> usuario@email.com </span>
+      <a href="/support/support-request/1" class="area-base">
+        <div class="title-area">
+          <h3 class="title">Dapibus ac facilisis in</h3>
+          <div>
+            <h4>01/01/2024 00:00:00</h4>
+            <span class="badge badge-secondary"> usuario@email.com </span>
+          </div>
         </div>
-      </div>
 
-      <div class="badges-area">
-        <span class="badge badge-danger">Urgência</span>
-        <span class="badge badge-info">Tipo</span>
-        <span class="badge badge-warning">Status</span>
-      </div>
+        <div class="badges-area">
+          <span class="badge badge-danger">Urgência</span>
+          <span class="badge badge-info">Tipo</span>
+          <span class="badge badge-warning">Status</span>
+        </div>
+      </a>
     </li>
     <li class="list-group-item">
-      <div class="title-area">
-        <h3 class="title">Morbi leo risus</h3>
-        <div>
-          <h4>01/01/2024 00:00:00</h4>
-          <span class="badge badge-secondary"> usuario@email.com </span>
+      <a href="/support/support-request/1" class="area-base">
+        <div class="title-area">
+          <h3 class="title">Morbi leo risus</h3>
+          <div>
+            <h4>01/01/2024 00:00:00</h4>
+            <span class="badge badge-secondary"> usuario@email.com </span>
+          </div>
         </div>
-      </div>
 
-      <div class="badges-area">
-        <span class="badge badge-danger">Urgência</span>
-        <span class="badge badge-info">Tipo</span>
-        <span class="badge badge-warning">Status</span>
-      </div>
+        <div class="badges-area">
+          <span class="badge badge-danger">Urgência</span>
+          <span class="badge badge-info">Tipo</span>
+          <span class="badge badge-warning">Status</span>
+        </div>
+      </a>
     </li>
     <li class="list-group-item">
-      <div class="title-area">
-        <h3 class="title">Porta ac consectetur ac</h3>
-        <div>
-          <h4>01/01/2024 00:00:00</h4>
-          <span class="badge badge-secondary"> usuario@email.com </span>
+      <a href="/support/support-request/1" class="area-base">
+        <div class="title-area">
+          <h3 class="title">Porta ac consectetur ac</h3>
+          <div>
+            <h4>01/01/2024 00:00:00</h4>
+            <span class="badge badge-secondary"> usuario@email.com </span>
+          </div>
         </div>
-      </div>
 
-      <div class="badges-area">
-        <span class="badge badge-danger">Urgência</span>
-        <span class="badge badge-info">Tipo</span>
-        <span class="badge badge-warning">Status</span>
-      </div>
+        <div class="badges-area">
+          <span class="badge badge-danger">Urgência</span>
+          <span class="badge badge-info">Tipo</span>
+          <span class="badge badge-warning">Status</span>
+        </div>
+      </a>
     </li>
     <li class="list-group-item">
-      <div class="title-area">
-        <h3 class="title">Vestibulum at eros</h3>
-        <div>
-          <h4>01/01/2024 00:00:00</h4>
-          <span class="badge badge-secondary"> usuario@email.com </span>
+      <a href="/support/support-request/1" class="area-base">
+        <div class="title-area">
+          <h3 class="title">Vestibulum at eros</h3>
+          <div>
+            <h4>01/01/2024 00:00:00</h4>
+            <span class="badge badge-secondary"> usuario@email.com </span>
+          </div>
         </div>
-      </div>
 
-      <div class="badges-area">
-        <span class="badge badge-danger">Urgência</span>
-        <span class="badge badge-info">Tipo</span>
-        <span class="badge badge-warning">Status</span>
-      </div>
+        <div class="badges-area">
+          <span class="badge badge-danger">Urgência</span>
+          <span class="badge badge-info">Tipo</span>
+          <span class="badge badge-warning">Status</span>
+        </div>
+      </a>
     </li>
   </ul>
 </template>
@@ -84,6 +94,20 @@
   justify-content: space-between;
   align-items: center;
   transition: all 0.3s;
+  padding: 0;
+}
+.list-group-item .area-base {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  color: #000;
+  padding: 0.75rem 1.25rem;
+  text-decoration: none;
+}
+.list-group-item .area-base:hover {
+  background-color: #f7f7f7;
+  cursor: pointer;
 }
 .list-group-item:hover {
   background-color: #f7f7f7;
