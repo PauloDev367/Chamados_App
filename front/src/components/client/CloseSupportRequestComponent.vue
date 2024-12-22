@@ -5,8 +5,8 @@
         <h3 class="title">Cras justo odio</h3>
         <div>
           <h4>01/01/2024 00:00:00</h4>
-          <span class="badge badge-info">
-            <i class="fa-solid fa-headset"></i> Aguardando supporte
+          <span class="badge badge-success">
+            <i class="fa-regular fa-circle-check"></i> Chamado finalizado
           </span>
         </div>
       </div>
@@ -22,8 +22,8 @@
         <h3 class="title">Dapibus ac facilisis in</h3>
         <div>
           <h4>01/01/2024 00:00:00</h4>
-          <span class="badge badge-info">
-            <i class="fa-solid fa-headset"></i> Aguardando supporte
+          <span class="badge badge-success">
+            <i class="fa-regular fa-circle-check"></i> Chamado finalizado
           </span>
         </div>
       </div>
@@ -39,8 +39,8 @@
         <h3 class="title">Morbi leo risus</h3>
         <div>
           <h4>01/01/2024 00:00:00</h4>
-          <span class="badge badge-warning">
-            <i class="fa-solid fa-user"></i> Aguardando cliente
+          <span class="badge badge-success">
+            <i class="fa-regular fa-circle-check"></i> Chamado finalizado
           </span>
         </div>
       </div>
@@ -56,8 +56,8 @@
         <h3 class="title">Porta ac consectetur ac</h3>
         <div>
           <h4>01/01/2024 00:00:00</h4>
-          <span class="badge badge-warning">
-            <i class="fa-solid fa-user"></i> Aguardando cliente
+          <span class="badge badge-success">
+            <i class="fa-regular fa-circle-check"></i> Chamado finalizado
           </span>
         </div>
       </div>
@@ -73,8 +73,8 @@
         <h3 class="title">Vestibulum at eros</h3>
         <div>
           <h4>01/01/2024 00:00:00</h4>
-          <span class="badge badge-info">
-            <i class="fa-solid fa-headset"></i> Aguardando supporte
+          <span class="badge badge-success">
+            <i class="fa-regular fa-circle-check"></i> Chamado finalizado
           </span>
         </div>
       </div>

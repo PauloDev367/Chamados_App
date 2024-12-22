@@ -16,15 +16,26 @@
             <div class="head-content">
               <ul>
                 <li>
-                  <a href="#" class="active">Chamos abertos</a>
+                  <a
+                    href="#"
+                    @click.prevent="handleHeadContentView(true)"
+                    :class="openSupportRequest == true ? 'active' : ''"
+                    >Chamos abertos</a
+                  >
                 </li>
                 <li>
-                  <a href="#">Chamos fechados</a>
+                  <a
+                    href="#"
+                    @click.prevent="handleHeadContentView(false)"
+                    :class="openSupportRequest == false ? 'active' : ''"
+                    >Chamos fechados</a
+                  >
                 </li>
               </ul>
             </div>
             <div class="body-content">
-              <OpenSupportRequestComponent />
+              <OpenSupportRequestComponent v-if="openSupportRequest == true" />
+              <CloseSupportRequestComponent v-else />
             </div>
           </div>
         </div>
@@ -34,7 +45,15 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
 import OpenSupportRequestComponent from "./../../components/client/OpenSupportRequestComponent.vue";
+import CloseSupportRequestComponent from "./../../components/client/CloseSupportRequestComponent.vue";
+
+const openSupportRequest = ref(true);
+
+const handleHeadContentView = (newStatus) => {
+  openSupportRequest.value = newStatus;
+};
 </script>
 
 <style scoped>
