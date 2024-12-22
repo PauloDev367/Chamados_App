@@ -12,6 +12,7 @@ use App\Repositories\Ports\IMessageRepository;
 use Illuminate\Validation\UnauthorizedException;
 use App\Repositories\Ports\ISupportRequestRepository;
 use App\Http\Requests\AddMessageToSupportRequestRequest;
+use App\Jobs\NewMessageJob;
 use App\Models\Message;
 use DomainException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -50,8 +51,10 @@ class MessageService implements IMessageService
         $message->status = (MessageStatus::WAITING_CLIENT_RESPONSE)->value;
         $message->type = (MessageType::SUPPORT)->value;
 
-
         $created = $this->repository->create($message);
+
+        $client = User::where('id', $supportRequest->client_id)->first();
+        NewMessageJob::dispatch($support, $client);
         return $created;
     }
     public function getAll(User $user, int $supportRequestId)
@@ -106,6 +109,8 @@ class MessageService implements IMessageService
         $message->type = (MessageType::CLIENT)->value;
 
         $created = $this->repository->create($message);
+        $support = User::where('id', $supportRequest->support_id)->first();
+        NewMessageJob::dispatch($client, $support);
         return $created;
     }
 }
