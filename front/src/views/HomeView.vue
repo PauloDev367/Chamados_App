@@ -3,10 +3,20 @@
     <form @submit.prevent="enter">
       <h2>Login</h2>
       <div class="form-group">
-        <input type="text" class="form-control" placeholder="E-mail" />
+        <input
+          type="text"
+          class="form-control"
+          v-model="formLogin.email"
+          placeholder="E-mail"
+        />
       </div>
       <div class="form-group">
-        <input type="password" class="form-control" placeholder="Senha" />
+        <input
+          type="password"
+          class="form-control"
+          v-model="formLogin.password"
+          placeholder="Senha"
+        />
       </div>
 
       <button>Entrar</button>
@@ -15,8 +25,46 @@
 </template>
 
 <script setup>
+import { useToastr } from "@/services/toastr";
+import { ref } from "vue";
+import { login, me } from "@/services/user";
+
+const toastr = useToastr();
+
+const formLogin = ref({
+  email: null,
+  password: null,
+});
+
 const enter = () => {
-  window.location = "/client";
+  if (
+    formLogin.value.email == null ||
+    formLogin.value.password == null ||
+    formLogin.value.email == "" ||
+    formLogin.value.password == ""
+  ) {
+    toastr.error("Preencha o e-mail e a senha para continuar");
+    return;
+  }
+
+  login(formLogin.value.email, formLogin.value.password)
+    .then((result) => {
+      if (result.status == 200) {
+        const token = result.data.access_token;
+        window.localStorage.setItem("token", token);
+        me()
+          .then((result) => {
+            const user = result.data;
+            window.localStorage.setItem("user", JSON.stringify(user));
+          })
+          .catch((err) => {
+            toastr.error("Erro ao tentar fazer login! Tente novamente.");
+          });
+      }
+    })
+    .catch((err) => {
+      toastr.error("E-mail ou senha inválidos.");
+    });
 };
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light" v-if="path != '/'">
     <a class="navbar-brand" href="/support">Chamados App</a>
     <button
       class="navbar-toggler"
@@ -26,3 +26,11 @@
   </nav>
   <router-view />
 </template>
+
+
+<script setup>
+import { ref } from "vue";
+
+const path = ref(window.location.pathname);
+
+</script>
