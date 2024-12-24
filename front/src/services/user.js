@@ -14,3 +14,6 @@ export function me() {
         }
     });
 }
+export function getUserFromLocalStorage() {
+    return JSON.parse(window.localStorage.getItem("user"));
+}

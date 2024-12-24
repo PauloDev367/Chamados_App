@@ -19,7 +19,7 @@
         />
       </div>
 
-      <button>Entrar</button>
+      <button :disabled="buttonSubmitDisabled">Entrar</button>
     </form>
   </div>
 </template>
@@ -28,8 +28,10 @@
 import { useToastr } from "@/services/toastr";
 import { ref } from "vue";
 import { login, me } from "@/services/user";
+import { CLIENT, SUPPORT } from "@/constants";
 
 const toastr = useToastr();
+const buttonSubmitDisabled = ref(false);
 
 const formLogin = ref({
   email: null,
@@ -47,6 +49,7 @@ const enter = () => {
     return;
   }
 
+  buttonSubmitDisabled.value = true;
   login(formLogin.value.email, formLogin.value.password)
     .then((result) => {
       if (result.status == 200) {
@@ -56,13 +59,21 @@ const enter = () => {
           .then((result) => {
             const user = result.data;
             window.localStorage.setItem("user", JSON.stringify(user));
+            if (user.role == CLIENT) {
+              window.location.href = "/client";
+            }
+            if (user.role == SUPPORT) {
+              window.location.href = "/support";
+            }
           })
           .catch((err) => {
+            buttonSubmitDisabled.value = false;
             toastr.error("Erro ao tentar fazer login! Tente novamente.");
           });
       }
     })
     .catch((err) => {
+      buttonSubmitDisabled.value = false;
       toastr.error("E-mail ou senha inválidos.");
     });
 };
