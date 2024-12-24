@@ -56,3 +56,15 @@ export function supportFinishSuppportRequest(id) {
         }
     });
 }
+export function supportAddMessageToSupportRequest(id, message) {
+
+    const data = {
+        message,
+        support_request_id: id
+    };
+    return axios.post(`${API_URL}/messages`, data, {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    });
+}

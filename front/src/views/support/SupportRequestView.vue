@@ -92,13 +92,17 @@
                   </div>
                 </template>
               </div>
-              
+
               <template
                 v-if="supportRequestWasEndend(supportRequest.status) != true"
               >
                 <div class="message-submit-area">
-                  <input type="text" />
-                  <button>
+                  <input
+                    type="text"
+                    v-model="messageToSubmit"
+                    @keypress.enter="submitMessageToClient"
+                  />
+                  <button @click="submitMessageToClient">
                     <i class="fa-solid fa-paper-plane"></i>
                   </button>
                 </div>
@@ -128,6 +132,7 @@ import { MessagesTypes } from "@/constants/MessagesTypes";
 import {
   getOneSupportRequest,
   getSupportRequestMessages,
+  supportAddMessageToSupportRequest,
   supportFinishSuppportRequest,
   supportGetSuppportRequest,
 } from "@/services/support";
@@ -143,6 +148,8 @@ const toastr = useToastr();
 const supportRequest = ref(null);
 const supportRequestMessages = ref(null);
 
+const messageToSubmit = ref(null);
+
 onMounted(() => {
   getOneSupportRequest(supportRequestId)
     .then((result) => {
@@ -155,6 +162,28 @@ onMounted(() => {
       toastr.error("Erro ao tentar buscar dados");
     });
 });
+
+const submitMessageToClient = () => {
+  if (messageToSubmit.value == null || messageToSubmit.value == "") {
+    toastr.error("Digite o texto para enviar a mensagem!");
+    return;
+  }
+
+  supportAddMessageToSupportRequest(supportRequestId, messageToSubmit.value)
+    .then((result) => {
+      console.log(result.data);
+
+      if (supportRequestMessages.value == null) {
+        supportRequestMessages.value = result.data.success;
+      } else {
+        supportRequestMessages.value.push(result.data.success);
+      }
+      messageToSubmit.value = null;
+    })
+    .catch((err) => {
+      toastr.error("Erro ao tentar adicionar mensagem");
+    });
+};
 
 const supportRequestWasEndend = (status) => {
   const wasEnded =
