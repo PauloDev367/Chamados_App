@@ -50,6 +50,19 @@ Para processar filas de alta prioridade e padrão:
    sail artisan queue:work --queue=high,default
    ```
 
+### Executando Testes Unitários
+
+Para rodar os testes unitários do projeto:
+
+1. Navegue até o diretório `/api`:
+   ```bash
+   cd api
+   ```
+2. Execute o comando:
+   ```bash
+   sail test
+   ```
+
 ### Criando Suporte e Cliente
 
 Use o Tinker, disponível no Laravel, para criar usuários do tipo suporte e cliente:
@@ -79,6 +92,10 @@ sail artisan tinker
   - **Usuário**: `postgres`
   - **Senha**: `postgres`
   - **Banco de Dados**: `postgres`
+
+## Documentação dos Endpoints
+
+O arquivo `Api Chamados.postman_collection` contém a collection do Postman com todos os endpoints do projeto. Utilize este arquivo para explorar e testar a API.
 
 ---
 

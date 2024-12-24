@@ -1,0 +1,376 @@
+{
+	"info": {
+		"_postman_id": "359ac05b-2f21-4dc9-8feb-2f5e52752fed",
+		"name": "Api Chamados",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "27505530"
+	},
+	"item": [
+		{
+			"name": "Support Request",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0L2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzM1MDcxMTU4LCJleHAiOjE3MzUwNzQ3NTgsIm5iZiI6MTczNTA3MTE1OCwianRpIjoiSUhNcHI2VGJobUR5M0xZdyIsInN1YiI6IjUiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.AFZjs6rlIT4EcWBh7EqZSUpifz7YfOeK0suv2rwIXvY"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"title with 10 characters\",\r\n    \"type\": \"FINANCIAL\",\r\n    \"urgency\": \"LOW\",\r\n    \"message\": \"message with 10 characters\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}support-requests"
+					},
+					"response": []
+				},
+				{
+					"name": "Get all from client",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0L2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzM1MDcyMzA4LCJleHAiOjE3MzUwNzU5MDgsIm5iZiI6MTczNTA3MjMwOCwianRpIjoieWVXMlM3WTdzM2pHSVlESSIsInN1YiI6IjUiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.bqZz98Yi--whpyrfXzxHW-mdcwyn7ic7k_5BLoXDLWk"
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}support-requests/client?supportrequest_status=IN_PROGRESS",
+							"host": [
+								"{{base_url}}support-requests"
+							],
+							"path": [
+								"client"
+							],
+							"query": [
+								{
+									"key": "supportrequest_status",
+									"value": "IN_PROGRESS"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all as support",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0L2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzM1MDcwMDk4LCJleHAiOjE3MzUwNzM2OTgsIm5iZiI6MTczNTA3MDA5OCwianRpIjoicEJ4OW05Yld4YmlTN0t0RyIsInN1YiI6IjMiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.5LQDxfGV0WS0CbrUd94DZImfrGzTuL4pmHRRytzP12U"
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}support-requests?supportrequest_status=PENDENT",
+							"host": [
+								"{{base_url}}support-requests"
+							],
+							"query": [
+								{
+									"key": "supportrequest_status",
+									"value": "PENDENT"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get one as support",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0L2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzM1MDYxNjM1LCJleHAiOjE3MzUwNjUyMzUsIm5iZiI6MTczNTA2MTYzNSwianRpIjoialJyZHNzejZjbXE3clpYeSIsInN1YiI6IjMiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.wpnRitzfZslhNO6P_uRFkHkZh-Iejs1iUkk62DOZjKs"
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": "{{base_url}}support-requests/2"
+					},
+					"response": []
+				},
+				{
+					"name": "Support get one to manage",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0L2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzM0ODEyNjI1LCJleHAiOjE3MzQ4MTYyMjUsIm5iZiI6MTczNDgxMjYyNSwianRpIjoiaHNjN2t6MnVDUlhtNnFpeSIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.XSWDuZs8pXwwrA00FX0-TtQjEtDzAC8aCCVxzu-aV78"
+							}
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": "{{base_url}}support-requests/2/manage"
+					},
+					"response": []
+				},
+				{
+					"name": "Support finish support request",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0L2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzM1MDYyODEzLCJleHAiOjE3MzUwNjY0MTMsIm5iZiI6MTczNTA2MjgxMywianRpIjoiMnRUenNwYXY3Z0NKTE1RNiIsInN1YiI6IjMiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.THbNqi49EgRjKQooM69Qy3-18YmggF4oDycGU-gWF2o"
+							}
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": "{{base_url}}support-requests/2/finish"
+					},
+					"response": []
+				},
+				{
+					"name": "Client finish support request",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0L2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzM0NzMzMDMxLCJleHAiOjE3MzQ3MzY2MzEsIm5iZiI6MTczNDczMzAzMSwianRpIjoicDR0ZVNWckc5TXhZVVQ3MiIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.10Eg2LV1tNjfDu-Xect1nz-Y2Y3xdE-8gvT0yBwZjhQ"
+							}
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": "{{base_url}}support-requests/1/client/finish"
+					},
+					"response": []
+				},
+				{
+					"name": "Client get one",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0L2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzM0NzMzMDMxLCJleHAiOjE3MzQ3MzY2MzEsIm5iZiI6MTczNDczMzAzMSwianRpIjoicDR0ZVNWckc5TXhZVVQ3MiIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.10Eg2LV1tNjfDu-Xect1nz-Y2Y3xdE-8gvT0yBwZjhQ"
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": "{{base_url}}support-requests/2/client"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Messages",
+			"item": [
+				{
+					"name": "Support add message",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0L2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzM1MDcwMDk4LCJleHAiOjE3MzUwNzM2OTgsIm5iZiI6MTczNTA3MDA5OCwianRpIjoicEJ4OW05Yld4YmlTN0t0RyIsInN1YiI6IjMiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.5LQDxfGV0WS0CbrUd94DZImfrGzTuL4pmHRRytzP12U"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"message\": \"ola, bom dia\",\r\n    \"support_request_id\":1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}messages"
+					},
+					"response": []
+				},
+				{
+					"name": "Client add message",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0L2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzM1MDYyODMyLCJleHAiOjE3MzUwNjY0MzIsIm5iZiI6MTczNTA2MjgzMiwianRpIjoidnMzNWd5VzdHTE1HYzh2VCIsInN1YiI6IjUiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.KFFrIgq2u0AZAVk50VzcsxCiridyy_dmm2ealxkxAxo"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"message\": \"ola, bom dia\",\r\n    \"support_request_id\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}messages/client"
+					},
+					"response": []
+				},
+				{
+					"name": "Get all messages from support request",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0L2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzM0ODE3MTExLCJleHAiOjE3MzQ4MjA3MTEsIm5iZiI6MTczNDgxNzExMSwianRpIjoiNXdDRFRvUURBT1EyVUJ2YiIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.qJ5SL5fFYvgV-2EG81asukUwFpgBVQrSjDU6vck-YRM"
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"message\": \"ola, bom dia\",\r\n    \"support_request_id\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}messages/support-request/2"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"client@client.com\",\r\n    \"password\": \"12345678\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{base_url}}auth/login"
+			},
+			"response": []
+		},
+		{
+			"name": "Me",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0L2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzM1MDAwMTY1LCJleHAiOjE3MzUwMDM3NjUsIm5iZiI6MTczNTAwMDE2NSwianRpIjoieU1Sczk4ZW9sbkthV3hzMCIsInN1YiI6IjMiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.ckX96p1bJk9cid69HTzkp4yYuN-6fjXk7CALuCYY_J4"
+					}
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{base_url}}auth/me"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:80/api/v1/",
+			"type": "default"
+		}
+	]
+}
