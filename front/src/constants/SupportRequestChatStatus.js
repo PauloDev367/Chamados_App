@@ -1,0 +1,5 @@
+export class SupportRequestChatStatus {
+    static NO_MESSAGES = "NO_MESSAGES";
+    static WAITING_SUPPORT_RESPONSE = "WAITING_SUPPORT_RESPONSE";
+    static WAITING_CLIENT_RESPONSE = "WAITING_CLIENT_RESPONSE";
+}

@@ -8,8 +8,21 @@
         <h3 class="title">{{ props.supportRequest.title }}</h3>
         <div>
           <h4>{{ formatDate(props.supportRequest.created_at) }}</h4>
-          <span class="badge badge-info">
-            <i class="fa-solid fa-headset"></i> Aguardando supporte
+          <span
+            class="badge"
+            :class="
+              MessagesTypesFormatter.getBadgeColor(
+                props.supportRequest.supportrequest_chat_status
+              )
+            "
+          >
+            <i class="fa-solid fa-headset"></i>
+
+            {{
+              MessagesTypesFormatter.getBadgeTranslate(
+                props.supportRequest.supportrequest_chat_status
+              )
+            }}
           </span>
         </div>
       </div>
@@ -66,6 +79,8 @@
 import { SupportRequestStatusFormatter } from "@/constants/SupportRequestStatusFormatter.js";
 import { SupportRequestUrgencyFormatter } from "@/constants/SupportRequestUrgencyFormatter.js";
 import { SupportRequestTypeFormatter } from "@/constants/SupportRequestTypeFormatter.js";
+import { MessagesTypesFormatter } from "@/constants/MessagesTypesFormatter.js";
+
 const props = defineProps({
   supportRequest: {
     required: true,
