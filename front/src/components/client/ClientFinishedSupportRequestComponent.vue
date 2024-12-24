@@ -8,8 +8,8 @@
         <h3 class="title">{{ props.supportRequest.title }}</h3>
         <div>
           <h4>{{ formatDate(props.supportRequest.created_at) }}</h4>
-          <span class="badge badge-info">
-            <i class="fa-solid fa-headset"></i> Aguardando supporte
+          <span class="badge badge-success">
+            <i class="fa-regular fa-circle-check"></i> Chamado finalizado
           </span>
         </div>
       </div>
