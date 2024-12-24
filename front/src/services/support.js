@@ -42,5 +42,12 @@ export function getSupportRequestMessages(id) {
         }
     });
 }
+export function supportGetSuppportRequest(id) {
+    return axios.patch(`${API_URL}/support-requests/${id}/manage`, {}, {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    });
+}
 
 

@@ -89,7 +89,10 @@
           </div>
 
           <div class="col-12 mb-3" v-else>
-            <button class="btn btn-block btn-sm btn-success">
+            <button
+              class="btn btn-block btn-sm btn-success"
+              @click="clientGetSupportRequest"
+            >
               <i class="fa-regular fa-circle-check"></i> Atender chamado
             </button>
           </div>
@@ -107,6 +110,7 @@ import { MessagesTypes } from "@/constants/MessagesTypes";
 import {
   getOneSupportRequest,
   getSupportRequestMessages,
+  supportGetSuppportRequest,
 } from "@/services/support";
 import { useToastr } from "@/services/toastr";
 import { onMounted, ref } from "vue";
@@ -139,6 +143,16 @@ const getAllSupportRequestMessages = () => {
     })
     .catch((err) => {
       toastr.error("Erro ao tentar buscar dados");
+    });
+};
+
+const clientGetSupportRequest = () => {
+  supportGetSuppportRequest(supportRequestId)
+    .then((result) => {
+      alert("Chamado pego com sucesso");
+    })
+    .catch((err) => {
+      toastr.error("Erro ao tentar pegar chamado");
     });
 };
 </script>
