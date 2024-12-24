@@ -11,3 +11,11 @@ export function getNewSupportRequests(page) {
         }
     });
 }
+
+export function getInProgressSupportRequests(page) {
+    return axios.get(`${API_URL}/support-requests?supportrequest_status=${SupportRequestStatus.IN_PROGRESS}&page=${page}`, {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    });
+}

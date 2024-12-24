@@ -1,102 +1,50 @@
 <template>
-  <ul class="list-group">
-    <li class="list-group-item">
-      <a href="/support/support-request/1" class="area-base">
-        <div class="title-area">
-          <h3 class="title">Cras justo odio</h3>
-          <div>
-            <h4>01/01/2024 00:00:00</h4>
-            <span class="badge badge-info">
-              <i class="fa-solid fa-headset"></i> Aguardando supporte
-            </span>
-          </div>
-        </div>
-
-        <div class="badges-area">
-          <span class="badge badge-danger">Urgência</span>
-          <span class="badge badge-info">Tipo</span>
-          <span class="badge badge-warning">Status</span>
-        </div>
-      </a>
-    </li>
-    <li class="list-group-item">
-      <a href="/support/support-request/1" class="area-base">
-        <div class="title-area">
-          <h3 class="title">Dapibus ac facilisis in</h3>
-          <div>
-            <h4>01/01/2024 00:00:00</h4>
-            <span class="badge badge-info">
-              <i class="fa-solid fa-headset"></i> Aguardando supporte
-            </span>
-          </div>
-        </div>
-
-        <div class="badges-area">
-          <span class="badge badge-danger">Urgência</span>
-          <span class="badge badge-info">Tipo</span>
-          <span class="badge badge-warning">Status</span>
-        </div>
-      </a>
-    </li>
-    <li class="list-group-item">
-      <a href="/support/support-request/1" class="area-base">
-        <div class="title-area">
-          <h3 class="title">Morbi leo risus</h3>
-          <div>
-            <h4>01/01/2024 00:00:00</h4>
-            <span class="badge badge-warning">
-              <i class="fa-solid fa-user"></i> Aguardando cliente
-            </span>
-          </div>
-        </div>
-
-        <div class="badges-area">
-          <span class="badge badge-danger">Urgência</span>
-          <span class="badge badge-info">Tipo</span>
-          <span class="badge badge-warning">Status</span>
-        </div>
-      </a>
-    </li>
-    <li class="list-group-item">
-      <a href="/support/support-request/1" class="area-base">
-        <div class="title-area">
-          <h3 class="title">Porta ac consectetur ac</h3>
-          <div>
-            <h4>01/01/2024 00:00:00</h4>
-            <span class="badge badge-warning">
-              <i class="fa-solid fa-user"></i> Aguardando cliente
-            </span>
-          </div>
-        </div>
-
-        <div class="badges-area">
-          <span class="badge badge-danger">Urgência</span>
-          <span class="badge badge-info">Tipo</span>
-          <span class="badge badge-warning">Status</span>
-        </div>
-      </a>
-    </li>
-    <li class="list-group-item">
-      <a href="/support/support-request/1" class="area-base">
-        <div class="title-area">
-          <h3 class="title">Vestibulum at eros</h3>
-          <div>
-            <h4>01/01/2024 00:00:00</h4>
-            <span class="badge badge-info">
-              <i class="fa-solid fa-headset"></i> Aguardando supporte
-            </span>
-          </div>
-        </div>
-
-        <div class="badges-area">
-          <span class="badge badge-danger">Urgência</span>
-          <span class="badge badge-info">Tipo</span>
-          <span class="badge badge-warning">Status</span>
-        </div>
-      </a>
-    </li>
+  <ul class="list-group" v-if="dataSearch != null">
+    <SupportRequestInProgressComponent
+      v-for="data in dataSearch.data"
+      :key="data.id"
+      :supportRequest="data"
+    />
   </ul>
+  <div class="mt-4">
+    <Bootstrap4Pagination
+      v-if="dataSearch != null"
+      :data="dataSearch"
+      @pagination-change-page="loadData"
+    >
+    </Bootstrap4Pagination>
+  </div>
 </template>
+
+
+
+<script setup>
+import { getInProgressSupportRequests } from "@/services/support";
+import { useToastr } from "@/services/toastr";
+import { onMounted, ref } from "vue";
+import SupportRequestInProgressComponent from "@/components/support/SupportRequestInProgressComponent";
+import { Bootstrap4Pagination } from "laravel-vue-pagination";
+
+const toastr = useToastr();
+const dataSearch = ref(null);
+
+onMounted(() => {
+  loadData(1);
+});
+
+const loadData = (page) => {
+  getInProgressSupportRequests(page)
+    .then((result) => {
+      const data = result.data.success;
+      dataSearch.value = data;
+    })
+    .catch((err) => {
+      toastr.error("Erro ao tentar buscar novos chamados!");
+    });
+};
+</script>
+
+
 
 <style scoped>
 .list-group-item {
