@@ -129,7 +129,7 @@ class SupportRequestService implements ISupportRequestService
             throw new UnauthorizedException("Unauthorized action");
         }
 
-        $supportRequest = $this->repository->getOneFromClient($id, $support->id);
+        $supportRequest = $this->repository->getOne($id, $support->id);
         if ($supportRequest == null) {
             throw new ModelNotFoundException("Support request not founded");
         }
