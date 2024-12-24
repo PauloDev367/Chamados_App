@@ -30,7 +30,10 @@ class SupportRequestRepository implements ISupportRequestRepository
                     (SupportRequestStatus::FINISHED_BY_SUPPORT)->value,
                 ]);
             } else {
-                $query->where("status", $status);
+                $query->whereIn("status", [
+                    (SupportRequestStatus::IN_PROGRESS)->value,
+                    (SupportRequestStatus::PENDENT)->value,
+                ]);
             }
         }
 
