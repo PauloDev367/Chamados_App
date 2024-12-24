@@ -2,6 +2,7 @@
 
 namespace Services;
 
+use App\Enums\MessageStatus;
 use App\Enums\Role;
 use Tests\TestCase;
 use App\Models\User;
@@ -43,6 +44,8 @@ class SupportRequestServiceTest extends TestCase
         $supportRequest->client_id = 123;
         $supportRequest->message = "message";
         $supportRequest->print = null;
+        $supportRequest->supportrequest_chat_status = (MessageStatus::NO_MESSAGES)->value;
+        $supportRequest->client_email = null;
 
         $repository = $this->createMock(ISupportRequestRepository::class);
         $repository->method('create')
