@@ -1,6 +1,13 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light" v-if="path != '/'">
-    <a class="navbar-brand" href="/support">Chamados App</a>
+  <nav
+    class="navbar navbar-expand-lg navbar-light bg-light"
+    v-if="user != null"
+  >
+    <a
+      class="navbar-brand"
+      :href="user.role == 'SUPPORT' ? '/support' : '/client'"
+      >Chamados App</a
+    >
     <button
       class="navbar-toggler"
       type="button"
@@ -16,10 +23,21 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <a class="nav-link" href="/support"> Home </a>
+          <a
+            class="nav-link"
+            :href="user.role == 'SUPPORT' ? '/support' : '/client'"
+          >
+            Home
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link btn btn-sm btn-outline-danger" href="/"> Sair</a>
+          <a
+            class="nav-link btn btn-sm btn-outline-danger"
+            href="/"
+            @click="logout"
+          >
+            Sair</a
+          >
         </li>
       </ul>
     </div>
@@ -30,7 +48,14 @@
 
 <script setup>
 import { ref } from "vue";
+import { getUserFromLocalStorage } from "./services/user";
 
 const path = ref(window.location.pathname);
 
+const user = getUserFromLocalStorage();
+
+const logout = () => {
+  window.localStorage.clear();
+  window.location.href = "/";
+};
 </script>
