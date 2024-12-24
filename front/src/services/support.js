@@ -19,6 +19,7 @@ export function getInProgressSupportRequests(page) {
         }
     });
 }
+
 export function getFinishedSupportRequests(page) {
     return axios.get(`${API_URL}/support-requests?supportrequest_status=${SupportRequestStatus.FINISHED_BY_CLIENT}&page=${page}`, {
         headers: {
@@ -26,3 +27,20 @@ export function getFinishedSupportRequests(page) {
         }
     });
 }
+
+export function getOneSupportRequest(id) {
+    return axios.get(`${API_URL}/support-requests/${id}`, {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    });
+}
+export function getSupportRequestMessages(id) {
+    return axios.get(`${API_URL}/messages/support-request/${id}`, {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    });
+}
+
+
