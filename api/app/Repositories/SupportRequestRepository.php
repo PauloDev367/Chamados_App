@@ -2,7 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Models\User;
+use Illuminate\Http\Request;
 use App\Models\SupportRequest;
+use App\Enums\SupportRequestStatus;
 use App\Repositories\Ports\ISupportRequestRepository;
 
 class SupportRequestRepository implements ISupportRequestRepository
@@ -17,9 +20,24 @@ class SupportRequestRepository implements ISupportRequestRepository
         return SupportRequest::where("client_id", $clientId)
             ->paginate(10);
     }
-    public function getAll()
+    public function getAll(Request $request, User $support)
     {
-        return SupportRequest::paginate(10);
+        $query = SupportRequest::query();
+
+        if ($request->has("supportrequest_status")) {
+            $status = $request->has("supportrequest_status");
+            $query->where("status", $status);
+
+            if (
+                $status == (SupportRequestStatus::IN_PROGRESS)->value ||
+                $status == (SupportRequestStatus::FINISHED_BY_CLIENT)->value ||
+                $status == (SupportRequestStatus::FINISHED_BY_SUPPORT)->value
+            ) {
+                $query->where("support_id", $support->id);
+            }
+        }
+
+        return $query->paginate(10);
     }
     public function update(SupportRequest $supportRequest)
     {

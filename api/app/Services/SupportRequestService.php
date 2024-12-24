@@ -12,6 +12,7 @@ use Illuminate\Validation\UnauthorizedException;
 use App\Http\Requests\V1\CreateSupportRequestRequest;
 use App\Repositories\Ports\ISupportRequestRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 
 class SupportRequestService implements ISupportRequestService
 {
@@ -90,13 +91,13 @@ class SupportRequestService implements ISupportRequestService
         return $supportRequest;
     }
 
-    public function getAllAsSupport(User $support)
+    public function getAllAsSupport(User $support, Request $request)
     {
         if ($support->role != (Role::SUPPORT)->value) {
             throw new UnauthorizedException("Unauthorized action");
         }
 
-        $data = $this->repository->getAll();
+        $data = $this->repository->getAll($request, $support);
         return $data;
     }
 

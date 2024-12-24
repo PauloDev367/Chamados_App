@@ -13,6 +13,7 @@ use Illuminate\Validation\UnauthorizedException;
 use App\Http\Requests\V1\CreateSupportRequestRequest;
 use App\Repositories\Ports\ISupportRequestRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 
 class SupportRequestServiceTest extends TestCase
 {
@@ -222,10 +223,11 @@ class SupportRequestServiceTest extends TestCase
         $client = new User();
         $client->role = (Role::CLIENT)->value;
 
+        $request = new Request();
         $service = new SupportRequestService($repository);
 
         $this->expectException(UnauthorizedException::class);
-        $service->getAllAsSupport($client);
+        $service->getAllAsSupport($client, $request);
     }
     public function test_support_should_not_get_requestservice_if_role_is_not_support()
     {
@@ -276,8 +278,6 @@ class SupportRequestServiceTest extends TestCase
         $this->expectException(DomainException::class);
         $service->supportGetAService($client, 1);
     }
-
-
 
     public function test_support_should_not_finish_client_requestservice_if_role_is_not_support()
     {
