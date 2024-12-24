@@ -29,19 +29,36 @@ Route::group([
     Route::group([
         'prefix' => 'support-requests'
     ], function () {
-        Route::post('', [SupportRequestController::class, 'create'])->name("supportrequest.create");
-        Route::get('client', [SupportRequestController::class, 'getAllFromClient'])->name("supportrequest.get.client");
-        Route::patch('{id}/client/finish', [SupportRequestController::class, 'clientFinishSupporRequest'])->name("supportrequest.finish.client");
-        Route::get('{id}/client', [SupportRequestController::class, 'clientGetOneSupportRequest'])->name("supportrequest.getone.client");
-        Route::get('', [SupportRequestController::class, 'supportGetAll'])->name("supportrequest.getall.support");
-        Route::patch('{id}/manage', [SupportRequestController::class, 'supportGetOneToManage'])->name("supportrequest.manage.support");
-        Route::patch('{id}/finish', [SupportRequestController::class, 'supportFinishService'])->name("supportrequest.finish.support");
+        Route::group([
+            'middleware' => 'rolechecker:CLIENT'
+        ], function () {
+            Route::post('', [SupportRequestController::class, 'create'])->name("supportrequest.create");
+            Route::get('client', [SupportRequestController::class, 'getAllFromClient'])->name("supportrequest.get.client");
+            Route::patch('{id}/client/finish', [SupportRequestController::class, 'clientFinishSupporRequest'])->name("supportrequest.finish.client");
+            Route::get('{id}/client', [SupportRequestController::class, 'clientGetOneSupportRequest'])->name("supportrequest.getone.client");
+        });
+        Route::group([
+            'middleware' => 'rolechecker:SUPPORT'
+        ], function () {
+            Route::get('', [SupportRequestController::class, 'supportGetAll'])->name("supportrequest.getall.support");
+            Route::patch('{id}/manage', [SupportRequestController::class, 'supportGetOneToManage'])->name("supportrequest.manage.support");
+            Route::patch('{id}/finish', [SupportRequestController::class, 'supportFinishService'])->name("supportrequest.finish.support");
+        });
     });
+    
     Route::group([
         'prefix' => 'messages'
     ], function () {
-        Route::post('', [MessagesController::class, 'supportAdd'])->name("message.add");
+        Route::group([
+            'middleware' => 'rolechecker:CLIENT'
+        ], function () {
+            Route::post('client', [MessagesController::class, 'clientAdd'])->name("message.client.add");
+        });
+        Route::group([
+            'middleware' => 'rolechecker:SUPPORT'
+        ], function () {
+            Route::post('', [MessagesController::class, 'supportAdd'])->name("message.add");
+        });
         Route::get('support-request/{id}', [MessagesController::class, 'getAll'])->name("message.getall");
-        Route::post('client', [MessagesController::class, 'clientAdd'])->name("message.client.add");
     });
 });
