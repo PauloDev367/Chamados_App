@@ -1,6 +1,6 @@
 <template>
   <div class="base">
-    <main>
+    <main v-if="supportRequest != null">
       <div class="container">
         <div class="row">
           <div class="col-12">
@@ -10,7 +10,7 @@
                   <input
                     type="text"
                     class="form-control"
-                    value="Titulo do chamado"
+                    :value="supportRequest.title"
                     readonly
                   />
                 </div>
@@ -20,7 +20,11 @@
                   <input
                     type="text"
                     class="form-control"
-                    value="Tipo de chamado"
+                    :value="
+                      SupportRequestTypeFormatter.getBadgeTranslate(
+                        supportRequest.type
+                      )
+                    "
                     readonly
                   />
                 </div>
@@ -30,60 +34,87 @@
                   <input
                     type="text"
                     class="form-control"
-                    value="Urgência do chamado"
+                    :value="
+                      SupportRequestUrgencyFormatter.getBadgeTranslate(
+                        supportRequest.urgency
+                      )
+                    "
                     readonly
                   />
                 </div>
               </div>
               <div class="col-12">
                 <div class="form-group">
-                  <textarea rows="5" readonly class="form-control">
-Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sint saepe consequuntur expedita nihil culpa totam rem facere, porro vel natus architecto eligendi. Assumenda at ipsam ut nemo cum vero numquam.</textarea
-                  >
+                  <textarea
+                    rows="5"
+                    readonly
+                    class="form-control"
+                    v-model="supportRequest.message"
+                  ></textarea>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="col-12">
-            <div class="area-actions text-right pb-3">
-                <button class="btn btn-sm btn-danger">
-                    <i class="fa-solid fa-ban"></i> 
+          <div class="col-12" v-if="supportRequest.support_id != null">
+            <div v-if="supportRequestMessages != null">
+              <div class="area-actions text-right pb-3">
+                <template
+                  v-if="supportRequestWasEndend(supportRequest.status) != true"
+                >
+                  <button
+                    class="btn btn-sm btn-danger"
+                    @click="endSupportRequest"
+                  >
+                    <i class="fa-solid fa-ban"></i>
                     Finalizar chamado
-                </button>
+                  </button>
+                </template>
+
+                <template v-else>
+                  <span class="btn btn-sm btn-block btn-success">
+                    <i class="fa-regular fa-circle-check"></i> Chamado
+                    finalizado
+                  </span>
+                </template>
+              </div>
+
+              <div class="area-messages">
+                <template v-for="data in supportRequestMessages" :key="data.id">
+                  <div
+                    :class="
+                      data.type == MessagesTypes.CLIENT
+                        ? 'client-message'
+                        : 'support-message'
+                    "
+                  >
+                    <span>{{ data.message }}</span>
+                  </div>
+                </template>
+              </div>
+
+              <template
+                v-if="supportRequestWasEndend(supportRequest.status) != true"
+              >
+                <div class="message-submit-area">
+                  <input
+                    type="text"
+                    v-model="messageToSubmit"
+                    @keypress.enter="submitMessageToClient"
+                  />
+                  <button @click="submitMessageToClient">
+                    <i class="fa-solid fa-paper-plane"></i>
+                  </button>
+                </div>
+              </template>
             </div>
-            <div class="area-messages">
-              <div class="client-message">
-                <span>Mensagem do cliente</span>
-              </div>
-              <div class="support-message">
-                <span>Mensagem do support</span>
-              </div>
-              <div class="client-message">
-                <span>Mensagem do cliente</span>
-              </div>
-              <div class="support-message">
-                <span>Mensagem do support</span>
-              </div>
-              <div class="client-message">
-                <span>Mensagem do cliente</span>
-              </div>
-              <div class="support-message">
-                <span>Mensagem do support</span>
-              </div>
-              <div class="support-message">
-                <span>Mensagem do support</span>
-              </div>
-              <div class="support-message">
-                <span>Mensagem do support</span>
-              </div>
-            </div>
-            <div class="message-submit-area">
-              <input type="text" />
-              <button>
-                <i class="fa-solid fa-paper-plane"></i>
-              </button>
-            </div>
+          </div>
+
+          <div class="col-12 mb-3" v-else>
+            <button class="btn btn-block btn-sm btn-warning">
+              <i class="fa-solid fa-circle-info"></i>
+              Aguardando chamado ser atendido
+            </button>
           </div>
         </div>
       </div>
@@ -93,12 +124,118 @@ Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sint saepe consequuntu
 
 
 <script setup>
+import { SupportRequestTypeFormatter } from "@/constants/SupportRequestTypeFormatter";
+import { SupportRequestUrgencyFormatter } from "@/constants/SupportRequestUrgencyFormatter";
+import { MessagesTypes } from "@/constants/MessagesTypes";
+import {
+  getOneSupportRequest,
+  getSupportRequestMessages,
+  clientAddMessageToSupportRequest,
+  clientFinishSuppportRequest,
+  clientGetSuppportRequest,
+} from "@/services/client";
+import { useToastr } from "@/services/toastr";
+import { onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
+import { SupportRequestStatus } from "@/constants/SupportRequestStatus";
+
+const route = useRoute();
+const supportRequestId = route.params.id;
+const toastr = useToastr();
+
+const supportRequest = ref(null);
+const supportRequestMessages = ref(null);
+
+const messageToSubmit = ref(null);
+
+onMounted(() => {
+  getOneSupportRequest(supportRequestId)
+    .then((result) => {
+      supportRequest.value = result.data.success;
+      if (supportRequest.value.support_id != null) {
+        getAllSupportRequestMessages();
+      }
+    })
+    .catch((err) => {
+      toastr.error("Erro ao tentar buscar dados");
+    });
+});
+
+const submitMessageToClient = () => {
+  if (messageToSubmit.value == null || messageToSubmit.value == "") {
+    toastr.error("Digite o texto para enviar a mensagem!");
+    return;
+  }
+
+  clientAddMessageToSupportRequest(supportRequestId, messageToSubmit.value)
+    .then((result) => {
+      console.log(result.data);
+
+      if (supportRequestMessages.value == null) {
+        supportRequestMessages.value = result.data.success;
+      } else {
+        supportRequestMessages.value.push(result.data.success);
+      }
+      messageToSubmit.value = null;
+    })
+    .catch((err) => {
+      if (err.response.data.error) {
+        toastr.error(
+          "Você precisa aguardar a resposta do suporte para enviar uma nova mensagem"
+        );
+      } else {
+        toastr.error("Erro ao tentar adicionar mensagem");
+      }
+    });
+};
+
+const supportRequestWasEndend = (status) => {
+  const wasEnded =
+    status == SupportRequestStatus.FINISHED_BY_CLIENT ||
+    status == SupportRequestStatus.FINISHED_BY_SUPPORT;
+
+  return wasEnded;
+};
+
+const getAllSupportRequestMessages = () => {
+  getSupportRequestMessages(supportRequest.value.id)
+    .then((result) => {
+      supportRequestMessages.value = result.data.success;
+    })
+    .catch((err) => {
+      toastr.error("Erro ao tentar buscar dados");
+    });
+};
+
+const clientGetSupportRequest = () => {
+  clientGetSuppportRequest(supportRequestId)
+    .then((result) => {
+      alert("Chamado pego com sucesso");
+      window.location.reload();
+    })
+    .catch((err) => {
+      toastr.error("Erro ao tentar pegar chamado");
+    });
+};
+
+const endSupportRequest = () => {
+  clientFinishSuppportRequest(supportRequestId)
+    .then((result) => {
+      alert("Chamado finalizado com sucesso");
+      window.location.reload();
+    })
+    .catch((err) => {
+      toastr.error("Erro ao tentar finalizar chamado");
+    });
+};
 </script>
 
 
 <style scoped>
 .base {
   padding-bottom: 40px;
+  height: 100%;
+  min-height: 100vh;
   background-color: #35374b;
 }
 main {
@@ -123,14 +260,14 @@ main .container {
   display: inline-block;
 }
 .area-messages .support-message {
-    text-align: right;
+  text-align: right;
 }
 .area-messages .support-message span {
   border-radius: 3px;
   padding: 10px;
   margin-bottom: 10px;
   display: inline-block;
-  background-color: rgba(138, 43, 226, .3);
+  background-color: rgba(138, 43, 226, 0.3);
 }
 
 .message-submit-area {

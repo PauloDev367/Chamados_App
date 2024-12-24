@@ -47,7 +47,7 @@ export function clientAddMessageToSupportRequest(id, message) {
         support_request_id: id
     };
 
-    return axios.post(`${API_URL}/messages/`, data, {
+    return axios.post(`${API_URL}/messages/client`, data, {
         headers: {
             Authorization: 'Bearer ' + token
         }

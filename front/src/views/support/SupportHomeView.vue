@@ -1,50 +1,122 @@
 <template>
   <div class="base">
-    <main>
+    <main v-if="supportRequest != null">
       <div class="container">
         <div class="row">
           <div class="col-12">
-            <div class="head-view">
-              <h2>Novos chamados</h2>
+            <div class="row">
+              <div class="col-12">
+                <div class="form-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    :value="supportRequest.title"
+                    readonly
+                  />
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="form-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    :value="
+                      SupportRequestTypeFormatter.getBadgeTranslate(
+                        supportRequest.type
+                      )
+                    "
+                    readonly
+                  />
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="form-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    :value="
+                      SupportRequestUrgencyFormatter.getBadgeTranslate(
+                        supportRequest.urgency
+                      )
+                    "
+                    readonly
+                  />
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group">
+                  <textarea
+                    rows="5"
+                    readonly
+                    class="form-control"
+                    v-model="supportRequest.message"
+                  ></textarea>
+                </div>
+              </div>
             </div>
-            <hr />
           </div>
-          <div class="col-12">
-            <div class="head-content">
-              <ul>
-                <li>
-                  <a
-                    href="#"
-                    @click.prevent="handleHeadContentView(null)"
-                    :class="openSupportRequest == null ? 'active' : ''"
-                    >Novos chamados</a
+
+          <div class="col-12" v-if="supportRequest.support_id != null">
+            <div v-if="supportRequestMessages != null">
+              <div class="area-actions text-right pb-3">
+                <template
+                  v-if="supportRequestWasEndend(supportRequest.status) != true"
+                >
+                  <button
+                    class="btn btn-sm btn-danger"
+                    @click="endSupportRequest"
                   >
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    @click.prevent="handleHeadContentView(true)"
-                    :class="openSupportRequest == true ? 'active' : ''"
-                    >Em andamento</a
+                    <i class="fa-solid fa-ban"></i>
+                    Finalizar chamado
+                  </button>
+                </template>
+
+                <template v-else>
+                  <span class="btn btn-sm btn-block btn-success">
+                    <i class="fa-regular fa-circle-check"></i> Chamado
+                    finalizado
+                  </span>
+                </template>
+              </div>
+
+              <div class="area-messages">
+                <template v-for="data in supportRequestMessages" :key="data.id">
+                  <div
+                    :class="
+                      data.type == MessagesTypes.CLIENT
+                        ? 'client-message'
+                        : 'support-message'
+                    "
                   >
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    @click.prevent="handleHeadContentView(false)"
-                    :class="openSupportRequest == false ? 'active' : ''"
-                    >Chamos finalizados</a
-                  >
-                </li>
-              </ul>
+                    <span>{{ data.message }}</span>
+                  </div>
+                </template>
+              </div>
+
+              <template
+                v-if="supportRequestWasEndend(supportRequest.status) != true"
+              >
+                <div class="message-submit-area">
+                  <input
+                    type="text"
+                    v-model="messageToSubmit"
+                    @keypress.enter="submitMessageToClient"
+                  />
+                  <button @click="submitMessageToClient">
+                    <i class="fa-solid fa-paper-plane"></i>
+                  </button>
+                </div>
+              </template>
             </div>
-            <div class="body-content">
-              <NewSupportRequestComponent v-if="openSupportRequest == null" />
-              <OpenSupportRequestComponent
-                v-else-if="openSupportRequest == true"
-              />
-              <CloseSupportRequestComponent v-else />
-            </div>
+          </div>
+
+          <div class="col-12 mb-3" v-else>
+            <button
+              class="btn btn-block btn-sm btn-success"
+              @click="clientGetSupportRequest"
+            >
+              <i class="fa-regular fa-circle-check"></i> Atender chamado
+            </button>
           </div>
         </div>
       </div>
@@ -52,21 +124,112 @@
   </div>
 </template>
 
+
 <script setup>
-import { ref } from "vue";
-import OpenSupportRequestComponent from "./../../components/support/OpenSupportRequestComponent.vue";
-import CloseSupportRequestComponent from "./../../components/support/CloseSupportRequestComponent.vue";
-import NewSupportRequestComponent from "./../../components/support/NewSupportRequestComponent.vue";
+import { SupportRequestTypeFormatter } from "@/constants/SupportRequestTypeFormatter";
+import { SupportRequestUrgencyFormatter } from "@/constants/SupportRequestUrgencyFormatter";
+import { MessagesTypes } from "@/constants/MessagesTypes";
+import {
+  getOneSupportRequest,
+  getSupportRequestMessages,
+  supportAddMessageToSupportRequest,
+  supportFinishSuppportRequest,
+  supportGetSuppportRequest,
+} from "@/services/support";
+import { useToastr } from "@/services/toastr";
+import { onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
+import { SupportRequestStatus } from "@/constants/SupportRequestStatus";
 
-const openSupportRequest = ref(null);
+const route = useRoute();
+const supportRequestId = route.params.id;
+const toastr = useToastr();
 
-const handleHeadContentView = (newStatus) => {
-  openSupportRequest.value = newStatus;
+const supportRequest = ref(null);
+const supportRequestMessages = ref(null);
+
+const messageToSubmit = ref(null);
+
+onMounted(() => {
+  getOneSupportRequest(supportRequestId)
+    .then((result) => {
+      supportRequest.value = result.data.success;
+      if (supportRequest.value.support_id != null) {
+        getAllSupportRequestMessages();
+      }
+    })
+    .catch((err) => {
+      toastr.error("Erro ao tentar buscar dados");
+    });
+});
+
+const submitMessageToClient = () => {
+  if (messageToSubmit.value == null || messageToSubmit.value == "") {
+    toastr.error("Digite o texto para enviar a mensagem!");
+    return;
+  }
+
+  supportAddMessageToSupportRequest(supportRequestId, messageToSubmit.value)
+    .then((result) => {
+      console.log(result.data);
+
+      if (supportRequestMessages.value == null) {
+        supportRequestMessages.value = result.data.success;
+      } else {
+        supportRequestMessages.value.push(result.data.success);
+      }
+      messageToSubmit.value = null;
+    })
+    .catch((err) => {
+      toastr.error("Erro ao tentar adicionar mensagem");
+    });
+};
+
+const supportRequestWasEndend = (status) => {
+  const wasEnded =
+    status == SupportRequestStatus.FINISHED_BY_CLIENT ||
+    status == SupportRequestStatus.FINISHED_BY_SUPPORT;
+
+  return wasEnded;
+};
+
+const getAllSupportRequestMessages = () => {
+  getSupportRequestMessages(supportRequest.value.id)
+    .then((result) => {
+      supportRequestMessages.value = result.data.success;
+    })
+    .catch((err) => {
+      toastr.error("Erro ao tentar buscar dados");
+    });
+};
+
+const clientGetSupportRequest = () => {
+  supportGetSuppportRequest(supportRequestId)
+    .then((result) => {
+      alert("Chamado pego com sucesso");
+      window.location.reload();
+    })
+    .catch((err) => {
+      toastr.error("Erro ao tentar pegar chamado");
+    });
+};
+
+const endSupportRequest = () => {
+  supportFinishSuppportRequest(supportRequestId)
+    .then((result) => {
+      alert("Chamado finalizado com sucesso");
+      window.location.reload();
+    })
+    .catch((err) => {
+      toastr.error("Erro ao tentar finalizar chamado");
+    });
 };
 </script>
 
+
 <style scoped>
 .base {
+  padding-bottom: 40px;
   height: 100%;
   min-height: 100vh;
   background-color: #35374b;
@@ -76,48 +239,54 @@ main {
 }
 main .container {
   background-color: #fff;
+  padding-top: 20px;
+}
+.area-messages {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px;
   padding: 20px;
-}
-
-#modalAddNewSupportRequest form button,
-button.chamado {
-  background-color: #720455;
-  color: #fff;
   border-radius: 5px;
-  border: none;
-  padding: 7px 14px;
+  min-height: 500px;
+}
+.area-messages .client-message span {
+  border-radius: 3px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: rgba(173, 255, 47, 0.5);
+  display: inline-block;
+}
+.area-messages .support-message {
+  text-align: right;
+}
+.area-messages .support-message span {
+  border-radius: 3px;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: inline-block;
+  background-color: rgba(138, 43, 226, 0.3);
 }
 
-.head-view {
+.message-submit-area {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-content: center;
+  margin-bottom: 20px;
 }
-.head-view h2 {
-  font-size: 1.6rem;
-  margin-bottom: 0;
-}
-
-.head-content ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
+.message-submit-area input {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  color: rgba(0, 0, 0, 0.8);
   width: 100%;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  padding: 5px 10px;
+  border-radius: 3px;
+  outline: none;
+  margin-right: 10px;
 }
-.head-content ul li a {
+.message-submit-area button {
+  background-color: #720455;
+  color: #fff;
+  border: none;
+  outline: none;
   padding: 10px;
-  display: inline-block;
-  text-decoration: none;
-  color: #000;
-}
-.head-content ul li a:hover,
-.head-content ul li a.active {
-  border: 2px solid rgba(0, 0, 0, 0.1);
-  border-bottom: 0;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+  border-radius: 3px;
 }
 </style>
