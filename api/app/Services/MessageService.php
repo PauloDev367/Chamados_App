@@ -52,6 +52,8 @@ class MessageService implements IMessageService
         $message->type = (MessageType::SUPPORT)->value;
 
         $created = $this->repository->create($message);
+        $supportRequest->supportrequest_chat_status = (MessageStatus::WAITING_CLIENT_RESPONSE)->value;
+        $supportRequest->save();
 
         $client = User::where('id', $supportRequest->client_id)->first();
         NewMessageJob::dispatch($support, $client);
@@ -109,6 +111,10 @@ class MessageService implements IMessageService
         $message->type = (MessageType::CLIENT)->value;
 
         $created = $this->repository->create($message);
+
+        $supportRequest->supportrequest_chat_status = (MessageStatus::WAITING_SUPPORT_RESPONSE)->value;
+        $supportRequest->save();
+
         $support = User::where('id', $supportRequest->support_id)->first();
         NewMessageJob::dispatch($client, $support);
         return $created;

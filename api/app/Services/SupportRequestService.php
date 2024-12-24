@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Enums\Role;
 use App\Models\User;
 use DomainException;
+use App\Enums\MessageStatus;
+use Illuminate\Http\Request;
 use App\Models\SupportRequest;
 use App\Enums\SupportRequestStatus;
 use App\Services\Ports\ISupportRequestService;
@@ -12,7 +14,6 @@ use Illuminate\Validation\UnauthorizedException;
 use App\Http\Requests\V1\CreateSupportRequestRequest;
 use App\Repositories\Ports\ISupportRequestRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
 
 class SupportRequestService implements ISupportRequestService
 {
@@ -40,6 +41,8 @@ class SupportRequestService implements ISupportRequestService
         $supportRequest->client_id = $client->id;
         $supportRequest->message = $request->message;
         $supportRequest->print = $filePath;
+        $supportRequest->supportrequest_chat_status = (MessageStatus::NO_MESSAGES)->value;
+        $supportRequest->client_email = $client->email;
 
         $this->repository->create($supportRequest);
         return $supportRequest;
@@ -146,7 +149,8 @@ class SupportRequestService implements ISupportRequestService
         return $update;
     }
 
-    public function supportGetOne(User $support, int $id){
+    public function supportGetOne(User $support, int $id)
+    {
         if ($support->role != (Role::SUPPORT)->value) {
             throw new UnauthorizedException("Unauthorized action");
         }
