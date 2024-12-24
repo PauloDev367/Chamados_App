@@ -17,6 +17,7 @@
             <hr />
           </div>
           <div class="col-12">
+
             <div class="head-content">
               <ul>
                 <li>
@@ -115,7 +116,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import OpenSupportRequestComponent from "./../../components/client/OpenSupportRequestComponent.vue";
 import CloseSupportRequestComponent from "./../../components/client/CloseSupportRequestComponent.vue";
 
@@ -124,6 +125,7 @@ const openSupportRequest = ref(true);
 const handleHeadContentView = (newStatus) => {
   openSupportRequest.value = newStatus;
 };
+
 </script>
 
 <style scoped>
