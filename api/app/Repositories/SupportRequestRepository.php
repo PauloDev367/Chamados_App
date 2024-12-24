@@ -26,7 +26,16 @@ class SupportRequestRepository implements ISupportRequestRepository
 
         if ($request->has("supportrequest_status")) {
             $status = $request->query("supportrequest_status");
-            $query->where("status", $status);
+            if (
+                $status == (SupportRequestStatus::FINISHED_BY_CLIENT)->value ||
+                $status == (SupportRequestStatus::FINISHED_BY_SUPPORT)->value
+            ) {
+                $query->where("status", (SupportRequestStatus::FINISHED_BY_CLIENT)->value);
+                $query->where("status", (SupportRequestStatus::FINISHED_BY_SUPPORT)->value);
+            } else {
+
+                $query->where("status", $status);
+            }
 
             if (
                 $status == (SupportRequestStatus::IN_PROGRESS)->value ||
