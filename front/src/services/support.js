@@ -19,3 +19,10 @@ export function getInProgressSupportRequests(page) {
         }
     });
 }
+export function getFinishedSupportRequests(page) {
+    return axios.get(`${API_URL}/support-requests?supportrequest_status=${SupportRequestStatus.FINISHED_BY_CLIENT}&page=${page}`, {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    });
+}
