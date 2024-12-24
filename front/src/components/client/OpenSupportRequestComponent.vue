@@ -1,25 +1,34 @@
 <template>
   <ul class="list-group" v-if="supportRequestsSearch != null">
-    <li class="list-group-item">
-      <template v-for="data in supportRequestsSearch.data" :key="data.id">
-        <ClientSupportRequestComponent :supportRequest="data" />
-      </template>
-    </li>
+    <template v-for="data in supportRequestsSearch.data" :key="data.id">
+      <ClientSupportRequestComponent :supportRequest="data" />
+    </template>
   </ul>
+
+  <div class="mt-4">
+    <Bootstrap4Pagination
+      v-if="supportRequestsSearch != null"
+      :data="supportRequestsSearch"
+      @pagination-change-page="loadData"
+    >
+    </Bootstrap4Pagination>
+  </div>
 </template>
 <script setup>
 import { getClientSupportRequests } from "@/services/client";
 import { useToastr } from "@/services/toastr";
 import { onMounted, ref } from "vue";
 import ClientSupportRequestComponent from "@/components/client/ClientSupportRequestComponent.vue";
+import { Bootstrap4Pagination } from "laravel-vue-pagination";
+
 const supportRequestsSearch = ref(null);
 onMounted(() => {
-  getAllClientSupportRequest(1);
+  loadData(1);
 });
 
 const toastr = useToastr();
 
-const getAllClientSupportRequest = (page) => {
+const loadData = (page) => {
   getClientSupportRequests(page)
     .then((result) => {
       supportRequestsSearch.value = result.data.success;

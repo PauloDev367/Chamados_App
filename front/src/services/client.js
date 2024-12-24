@@ -53,3 +53,23 @@ export function clientAddMessageToSupportRequest(id, message) {
         }
     });
 }
+
+
+export function createSupportRequest(formData) {
+    const data = new FormData();
+    data.append("title", formData.title);
+    data.append("type", formData.type);
+    data.append("urgency", formData.urgency);
+    data.append("message", formData.message);
+
+    if (formData.file) {
+        data.append("file", formData.file);
+    }
+
+    return axios.post(`${API_URL}/support-requests`, data, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: "Bearer " + token
+        },
+    });
+}

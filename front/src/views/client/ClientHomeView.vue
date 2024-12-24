@@ -17,7 +17,6 @@
             <hr />
           </div>
           <div class="col-12">
-
             <div class="head-content">
               <ul>
                 <li>
@@ -71,45 +70,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form action="">
-          <div class="modal-body">
-            <div class="form-group">
-              <label>Titulo:</label>
-              <input type="text" class="form-control" />
-            </div>
-            <div class="form-group">
-              <label>Tipo:</label>
-              <select class="form-control">
-                <option selected disabled>Selecione</option>
-                <option value="TECHNICAL">Técnico</option>
-                <option value="FINANCIAL">Financeiro</option>
-                <option value="OTHER">Outros</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Urgência:</label>
-              <select class="form-control">
-                <option selected disabled>Selecione</option>
-                <option value="LOW">Baixa</option>
-                <option value="MEDIUM">Média</option>
-                <option value="URGENCY">Alta</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Mensagem:</label>
-              <textarea type="text" rows="5" class="form-control"></textarea>
-            </div>
-            <div class="form-group">
-              <label>Foto 5MB:</label>
-              <input type="file" class="form-control" />
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="submit">
-              <i class="fa-regular fa-square-plus"></i> Abrir chamado
-            </button>
-          </div>
-        </form>
+        <FormCreateSupportRequestComponent />
       </div>
     </div>
   </div>
@@ -119,18 +80,19 @@
 import { onMounted, ref } from "vue";
 import OpenSupportRequestComponent from "./../../components/client/OpenSupportRequestComponent.vue";
 import CloseSupportRequestComponent from "./../../components/client/CloseSupportRequestComponent.vue";
+import FormCreateSupportRequestComponent from "./../../components/client/FormCreateSupportRequestComponent";
 
 const openSupportRequest = ref(true);
 
 const handleHeadContentView = (newStatus) => {
   openSupportRequest.value = newStatus;
 };
-
 </script>
 
 <style scoped>
 .base {
-  height: 100vh;
+  height: 100%;
+  min-height: 100vh;
   background-color: #35374b;
 }
 main {
