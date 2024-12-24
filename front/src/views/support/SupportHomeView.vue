@@ -67,7 +67,8 @@ const handleHeadContentView = (newStatus) => {
 
 <style scoped>
 .base {
-  height: 100vh;
+  height: 100%;
+  min-height: 100vh;
   background-color: #35374b;
 }
 main {
