@@ -9,7 +9,7 @@ use App\Http\Requests\V1\CreateSupportRequestRequest;
 interface ISupportRequestService
 {
     public function create(User $client, CreateSupportRequestRequest $request);
-    public function getAllFromClient(User $client);
+    public function getAllFromClient(User $client, Request $request);
     public function clientFinishSupporRequest(User $client, int $supportRequestId);
     public function clientGetOne(User $client, int $id);
     public function getAllAsSupport(User $support, Request $request);

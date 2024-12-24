@@ -15,9 +15,32 @@ class SupportRequestRepository implements ISupportRequestRepository
         $supportRequest->save();
         return $supportRequest;
     }
-    public function getAllFromClient(int $clientId)
+    public function getAllFromClient(int $clientId, Request $request)
     {
-        return SupportRequest::where("client_id", $clientId)
+        $query =  SupportRequest::query();
+
+        if ($request->has("supportrequest_status")) {
+            $status = $request->query("supportrequest_status");
+            if (
+                $status == (SupportRequestStatus::FINISHED_BY_CLIENT)->value ||
+                $status == (SupportRequestStatus::FINISHED_BY_SUPPORT)->value
+            ) {
+                $query->where("status", (SupportRequestStatus::FINISHED_BY_CLIENT)->value);
+                $query->where("status", (SupportRequestStatus::FINISHED_BY_SUPPORT)->value);
+            } else {
+                $query->where("status", $status);
+            }
+
+            if (
+                $status == (SupportRequestStatus::IN_PROGRESS)->value ||
+                $status == (SupportRequestStatus::FINISHED_BY_CLIENT)->value ||
+                $status == (SupportRequestStatus::FINISHED_BY_SUPPORT)->value
+            ) {
+                $query->where("client_id", $clientId);
+            }
+        }
+
+        return $query->where("client_id", $clientId)
             ->paginate(10);
     }
     public function getAll(Request $request, User $support)

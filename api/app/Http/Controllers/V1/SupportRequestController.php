@@ -21,10 +21,10 @@ class SupportRequestController extends Controller
         return response()->json(['success' => $created], 201);
     }
 
-    public function getAllFromClient()
+    public function getAllFromClient(Request $request)
     {
         $user = auth()->user();
-        $data = $this->service->getAllFromClient($user);
+        $data = $this->service->getAllFromClient($user, $request);
         return response()->json(['success' => $data], 200);
     }
 

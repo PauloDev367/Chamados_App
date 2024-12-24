@@ -74,9 +74,9 @@ class SupportRequestServiceTest extends TestCase
         $client->role = (Role::SUPPORT)->value;
 
         $service = new SupportRequestService($repository);
-
+        $request = new Request();
         $this->expectException(UnauthorizedException::class);
-        $service->getAllFromClient($client);
+        $service->getAllFromClient($client, $request);
     }
     public function test_should_get_client_requestservice_if_role_is_client()
     {
@@ -98,8 +98,8 @@ class SupportRequestServiceTest extends TestCase
         $client->role = (Role::CLIENT)->value;
 
         $service = new SupportRequestService($repository);
-
-        $data = $service->getAllFromClient($client);
+        $request = new Request();
+        $data = $service->getAllFromClient($client, $request);
         $this->assertEquals(1, count($data));
     }
     public function test_should_not_finish_client_requestservice_if_role_is_not_client()
