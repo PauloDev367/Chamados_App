@@ -59,10 +59,24 @@
           <div class="col-12" v-if="supportRequest.support_id != null">
             <div v-if="supportRequestMessages != null">
               <div class="area-actions text-right pb-3">
-                <button class="btn btn-sm btn-danger">
-                  <i class="fa-solid fa-ban"></i>
-                  Finalizar chamado
-                </button>
+                <template
+                  v-if="supportRequestWasEndend(supportRequest.status) != true"
+                >
+                  <button
+                    class="btn btn-sm btn-danger"
+                    @click="endSupportRequest"
+                  >
+                    <i class="fa-solid fa-ban"></i>
+                    Finalizar chamado
+                  </button>
+                </template>
+
+                <template v-else>
+                  <span class="btn btn-sm btn-block btn-success">
+                    <i class="fa-regular fa-circle-check"></i> Chamado
+                    finalizado
+                  </span>
+                </template>
               </div>
 
               <div class="area-messages">
@@ -78,13 +92,17 @@
                   </div>
                 </template>
               </div>
-
-              <div class="message-submit-area">
-                <input type="text" />
-                <button>
-                  <i class="fa-solid fa-paper-plane"></i>
-                </button>
-              </div>
+              
+              <template
+                v-if="supportRequestWasEndend(supportRequest.status) != true"
+              >
+                <div class="message-submit-area">
+                  <input type="text" />
+                  <button>
+                    <i class="fa-solid fa-paper-plane"></i>
+                  </button>
+                </div>
+              </template>
             </div>
           </div>
 
@@ -110,11 +128,13 @@ import { MessagesTypes } from "@/constants/MessagesTypes";
 import {
   getOneSupportRequest,
   getSupportRequestMessages,
+  supportFinishSuppportRequest,
   supportGetSuppportRequest,
 } from "@/services/support";
 import { useToastr } from "@/services/toastr";
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
+import { SupportRequestStatus } from "@/constants/SupportRequestStatus";
 
 const route = useRoute();
 const supportRequestId = route.params.id;
@@ -136,6 +156,14 @@ onMounted(() => {
     });
 });
 
+const supportRequestWasEndend = (status) => {
+  const wasEnded =
+    status == SupportRequestStatus.FINISHED_BY_CLIENT ||
+    status == SupportRequestStatus.FINISHED_BY_SUPPORT;
+
+  return wasEnded;
+};
+
 const getAllSupportRequestMessages = () => {
   getSupportRequestMessages(supportRequest.value.id)
     .then((result) => {
@@ -150,9 +178,21 @@ const clientGetSupportRequest = () => {
   supportGetSuppportRequest(supportRequestId)
     .then((result) => {
       alert("Chamado pego com sucesso");
+      window.location.reload();
     })
     .catch((err) => {
       toastr.error("Erro ao tentar pegar chamado");
+    });
+};
+
+const endSupportRequest = () => {
+  supportFinishSuppportRequest(supportRequestId)
+    .then((result) => {
+      alert("Chamado finalizado com sucesso");
+      window.location.reload();
+    })
+    .catch((err) => {
+      toastr.error("Erro ao tentar finalizar chamado");
     });
 };
 </script>
