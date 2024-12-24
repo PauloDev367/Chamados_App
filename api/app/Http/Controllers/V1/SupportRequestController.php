@@ -61,4 +61,10 @@ class SupportRequestController extends Controller
         $data = $this->service->supportFinishService($user,$id);
         return response()->json(['success' => $data], 200);
     }
+    public function supportGetOne(int $id)
+    {
+        $user = auth()->user();
+        $data = $this->service->supportGetOne($user, $id);
+        return response()->json(['success' => $data], 200);
+    }
 }

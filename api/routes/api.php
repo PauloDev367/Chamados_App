@@ -41,6 +41,7 @@ Route::group([
             'middleware' => 'rolechecker:SUPPORT'
         ], function () {
             Route::get('', [SupportRequestController::class, 'supportGetAll'])->name("supportrequest.getall.support");
+            Route::get('{id}', [SupportRequestController::class, 'supportGetOne'])->name("supportrequest.getone.support");
             Route::patch('{id}/manage', [SupportRequestController::class, 'supportGetOneToManage'])->name("supportrequest.manage.support");
             Route::patch('{id}/finish', [SupportRequestController::class, 'supportFinishService'])->name("supportrequest.finish.support");
         });
