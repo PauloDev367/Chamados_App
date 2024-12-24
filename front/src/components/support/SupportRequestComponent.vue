@@ -1,6 +1,9 @@
 <template>
   <li class="list-group-item" v-if="props.supportRequest != null">
-    <a href="/support/support-request/1" class="area-base">
+    <a
+      :href="`/support/support-request/${props.supportRequest.id}`"
+      class="area-base"
+    >
       <div class="title-area">
         <h3 class="title">{{ props.supportRequest.title }}</h3>
         <div>
