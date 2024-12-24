@@ -25,18 +25,12 @@ class SupportRequestRepository implements ISupportRequestRepository
                 $status == (SupportRequestStatus::FINISHED_BY_CLIENT)->value ||
                 $status == (SupportRequestStatus::FINISHED_BY_SUPPORT)->value
             ) {
-                $query->where("status", (SupportRequestStatus::FINISHED_BY_CLIENT)->value);
-                $query->where("status", (SupportRequestStatus::FINISHED_BY_SUPPORT)->value);
+                $query->whereIn("status", [
+                    (SupportRequestStatus::FINISHED_BY_CLIENT)->value,
+                    (SupportRequestStatus::FINISHED_BY_SUPPORT)->value,
+                ]);
             } else {
                 $query->where("status", $status);
-            }
-
-            if (
-                $status == (SupportRequestStatus::IN_PROGRESS)->value ||
-                $status == (SupportRequestStatus::FINISHED_BY_CLIENT)->value ||
-                $status == (SupportRequestStatus::FINISHED_BY_SUPPORT)->value
-            ) {
-                $query->where("client_id", $clientId);
             }
         }
 
@@ -53,8 +47,10 @@ class SupportRequestRepository implements ISupportRequestRepository
                 $status == (SupportRequestStatus::FINISHED_BY_CLIENT)->value ||
                 $status == (SupportRequestStatus::FINISHED_BY_SUPPORT)->value
             ) {
-                $query->where("status", (SupportRequestStatus::FINISHED_BY_CLIENT)->value);
-                $query->where("status", (SupportRequestStatus::FINISHED_BY_SUPPORT)->value);
+                $query->whereIn("status", [
+                    (SupportRequestStatus::FINISHED_BY_CLIENT)->value,
+                    (SupportRequestStatus::FINISHED_BY_SUPPORT)->value,
+                ]);
             } else {
 
                 $query->where("status", $status);
