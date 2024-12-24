@@ -7,8 +7,13 @@
       <div class="title-area">
         <h3 class="title">{{ props.supportRequest.title }}</h3>
         <div>
-          <h4>{{ formatDate(props.supportRequest.created_at) }}</h4>
-          <span class="badge badge-secondary"> usuario@email.com </span>
+          <h4>
+            Última atualização:
+            {{ formatDate(props.supportRequest.updated_at) }}
+          </h4>
+          <span class="badge badge-secondary">
+            {{ props.supportRequest.client_email }}
+          </span>
         </div>
       </div>
 
